@@ -120,9 +120,17 @@ public class CalendarView extends View {
      */
     public static final int MASK_CALENDAR_SCROLL = 0b0010_0000_0000;
     /**
+     * flag日期信息,是否允许滑动
+     */
+    public static final int MASK_CALENDAR_SCROLL_HORIZONTAL = 0b0100_0000_0000;
+    /**
+     * flag日期信息,是否允许滑动
+     */
+    public static final int MASK_CALENDAR_SCROLL_VERTICAL = 0b1000_0000_0000;
+    /**
      * flag日期信息,右上角的标志
      */
-    public static final int MASK_CALENDAR_TAG = 0b0100_0000_0000;
+    public static final int MASK_CALENDAR_TAG = 0b0001_0000_0000_0000;
 
     //星期说明标题栏的字体颜色
     private int mWeekTitleTextColor;
@@ -304,13 +312,18 @@ public class CalendarView extends View {
                     if (mScrollDirection == SCROLL_AXIS_NONE) {
                         float absX = Math.abs(distanceX);
                         float absY = Math.abs(distanceY);
-                        //根据滑动的距离确定滑动方向
-                        if (absX > 10 && absX > absY) {
+                        if (getCalendarStatus(MASK_CALENDAR_SCROLL_HORIZONTAL) && getCalendarStatus(MASK_CALENDAR_SCROLL_VERTICAL)) {
+                            //根据滑动的距离确定滑动方向
+                            if (absX > 10 && absX > absY) {
+                                mScrollDirection = SCROLL_AXIS_HORIZONTAL;
+                            } else if (absY > 10 && absY > absX) {
+                                mScrollDirection = SCROLL_AXIS_VERTICAL;
+                            }
+                        } else if (getCalendarStatus(MASK_CALENDAR_SCROLL_HORIZONTAL) && absX > 10) {
                             mScrollDirection = SCROLL_AXIS_HORIZONTAL;
-                        } else if (absY > 10 && absY > absX) {
+                        } else if (getCalendarStatus(MASK_CALENDAR_SCROLL_VERTICAL) && absY > 10) {
                             mScrollDirection = SCROLL_AXIS_VERTICAL;
                         }
-
                         //一次滑动事件中如果已经确定了滑动方向则不会再有任何改变
                     }
 
@@ -334,8 +347,6 @@ public class CalendarView extends View {
                         if (day != -1) {
                             //切换选中日期
                             mSelectedDay = day;
-                            //刷新界面
-                            invalidate();
                         }
                     } else {
                         //TODO:长按
@@ -365,10 +376,12 @@ public class CalendarView extends View {
                             switch2NewMonth(true);
                         }
                     }
-                    //滑动方向重置
-                    mScrollDirection = SCROLL_AXIS_NONE;
-                    mScrollDistance = 0;
                 }
+                //滑动方向重置
+                mScrollDirection = SCROLL_AXIS_NONE;
+                mScrollDistance = 0;
+                //刷新界面
+                invalidate();
                 break;
         }
         return true;
@@ -697,8 +710,6 @@ public class CalendarView extends View {
         mRecycleDate.add(Calendar.MONTH, isIncreased ? 1 : -1);
         mSelectedYear = mRecycleDate.get(Calendar.YEAR);
         mSelectedMonth = mRecycleDate.get(Calendar.MONTH);
-        //切换后重绘
-        invalidate();
     }
 
     /**
@@ -1218,7 +1229,7 @@ public class CalendarView extends View {
                 | MASK_CALENDAR_MINOR_WEEKEND | MASK_CALENDAR_MINOR_FESTIVAL
                 | MASK_CALENDAR_WEEK_TITLE | MASK_CALENDAR_WEEK_TITLE_CHINESE
                 | MASK_CALENDAR_LUNAR_DATE
-                | MASK_CALENDAR_SCROLL;
+                | MASK_CALENDAR_SCROLL | MASK_CALENDAR_SCROLL_HORIZONTAL | MASK_CALENDAR_SCROLL_VERTICAL;
         return this;
     }
 
@@ -1247,6 +1258,8 @@ public class CalendarView extends View {
      *             <li>{@link #MASK_CALENDAR_NEXT_MONTH},显示下个月份(次要月份)</li>
      *             <li>{@link #MASK_CALENDAR_PREVIOUS_MONTH},显示上个月份(次要月份)</li>
      *             <li>{@link #MASK_CALENDAR_SCROLL},允许日历滑动切换月份</li>
+     *             <li>{@link #MASK_CALENDAR_SCROLL_HORIZONTAL},允许横向日历滑动切换月份</li>
+     *             <li>{@link #MASK_CALENDAR_SCROLL_VERTICAL},允许纵向日历滑动切换月份</li>
      *             <li>{@link #MASK_CALENDAR_TAG},日历标志,暂时未使用</li>
      *             <li>{@link #MASK_CALENDAR_WEEK_TITLE},日历星期标题</li>
      *             <li>{@link #MASK_CALENDAR_WEEK_TITLE_CHINESE},星期标题使用中文</li>
@@ -1268,6 +1281,8 @@ public class CalendarView extends View {
      *             <li>{@link #MASK_CALENDAR_NEXT_MONTH},显示下个月份(次要月份)</li>
      *             <li>{@link #MASK_CALENDAR_PREVIOUS_MONTH},显示上个月份(次要月份)</li>
      *             <li>{@link #MASK_CALENDAR_SCROLL},允许日历滑动切换月份</li>
+     *             <li>{@link #MASK_CALENDAR_SCROLL_HORIZONTAL},允许横向日历滑动切换月份</li>
+     *             <li>{@link #MASK_CALENDAR_SCROLL_VERTICAL},允许纵向日历滑动切换月份</li>
      *             <li>{@link #MASK_CALENDAR_TAG},日历标志,暂时未使用</li>
      *             <li>{@link #MASK_CALENDAR_WEEK_TITLE},日历星期标题</li>
      *             <li>{@link #MASK_CALENDAR_WEEK_TITLE_CHINESE},星期标题使用中文</li>
@@ -1302,6 +1317,8 @@ public class CalendarView extends View {
      *             <li>{@link #MASK_CALENDAR_NEXT_MONTH},显示下个月份(次要月份)</li>
      *             <li>{@link #MASK_CALENDAR_PREVIOUS_MONTH},显示上个月份(次要月份)</li>
      *             <li>{@link #MASK_CALENDAR_SCROLL},允许日历滑动切换月份</li>
+     *             <li>{@link #MASK_CALENDAR_SCROLL_HORIZONTAL},允许横向日历滑动切换月份</li>
+     *             <li>{@link #MASK_CALENDAR_SCROLL_VERTICAL},允许纵向日历滑动切换月份</li>
      *             <li>{@link #MASK_CALENDAR_TAG},日历标志,暂时未使用</li>
      *             <li>{@link #MASK_CALENDAR_WEEK_TITLE},日历星期标题</li>
      *             <li>{@link #MASK_CALENDAR_WEEK_TITLE_CHINESE},星期标题使用中文</li>
