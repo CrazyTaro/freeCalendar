@@ -19,18 +19,44 @@ public class DayCell {
     private String lunarFestival;
     //农历日期
     private String lunarDate = null;
-    // 是否今天
-    private boolean isToday = false;
     //公历节日
     private String solarFestival = null;
     //节气
     private String solarTermFestival = null;
     // 0没有，1假，2班
-    private int jbj = 0;
+    private int specialDateStatus = 0;
     // 是否周末
     private boolean isWeekend = false;
     // 是否是节日
     private boolean isHoliday = false;
+
+    /**
+     * 重置所有数据
+     */
+    public void reset() {
+        this.year = 0;
+        this.month = 0;
+        this.day = 0;
+        this.lunarFestival = null;
+        this.solarFestival = null;
+        this.solarTermFestival = null;
+        this.lunarDate = null;
+        this.specialDateStatus = 0;
+        this.isHoliday = false;
+        this.isWeekend = false;
+    }
+
+    /**
+     * 是否今日
+     *
+     * @param todayYear  当天日期年份
+     * @param todayMonth 当天日期月份,月份需要注意为实际月份-1
+     * @param todayDate  当天日期天数
+     * @return
+     */
+    public boolean isToday(int todayYear, int todayMonth, int todayDate) {
+        return year == todayYear && month == todayMonth && day == todayDate;
+    }
 
     public boolean isHoliday() {
         return isHoliday;
@@ -80,14 +106,6 @@ public class DayCell {
         this.lunarFestival = lunarFestival;
     }
 
-    public boolean isToday() {
-        return isToday;
-    }
-
-    public void setIsToday(boolean boolT) {
-        this.isToday = boolT;
-    }
-
     public String getSolarFestival() {
         return solarFestival;
     }
@@ -113,14 +131,20 @@ public class DayCell {
     }
 
     public boolean isSpecialDate(int mask) {
-        return (mask & jbj) != 0;
+        return (mask & specialDateStatus) != 0;
     }
 
+    /**
+     * 设置当前是否为特殊的日期
+     *
+     * @param mask   日期flag字段
+     * @param isTrue true为设置该特殊日期,false为取消该特殊日期
+     */
     public void setSpecialDate(int mask, boolean isTrue) {
         if (isTrue) {
-            this.jbj |= mask;
+            this.specialDateStatus |= mask;
         } else {
-            this.jbj &= ~mask;
+            this.specialDateStatus &= ~mask;
         }
     }
 }
