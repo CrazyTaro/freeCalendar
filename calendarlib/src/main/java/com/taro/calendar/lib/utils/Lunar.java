@@ -644,8 +644,10 @@ public class Lunar {
         this.isFinded = false;
         this.isLFestival = false;
         this.isSFestival = false;
-        this.lFestivalName="";
-        this.sFestivalName="";
+        this.lFestivalName = "";
+        this.sFestivalName = "";
+        this.description = "";
+        this.isHoliday = false;
     }
 
     /**
