@@ -18,7 +18,7 @@ import com.taro.calendar.lib.drawable.TipDrawable;
 import com.taro.calendar.lib.utils.Lunar;
 
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.Stack;
 
 /**
  * Created by taro on 2017/6/1.
@@ -205,9 +205,9 @@ public class CalendarView extends View {
     private Drawable mBackgroundDraw;
 
     //缓存计算日期的map对象
-    private SparseArrayCompat<SparseArrayCompat<DayCell>> mDateMap;
+    private SparseArrayCompat<SparseArrayCompat<DayCell>> mCacheDateMap;
     //记录当前已缓存的月份对象
-    private HashSet<Integer> mMonthSet;
+    private Stack<SparseArrayCompat<DayCell>> mRecycleMonthStack;
 
     private float mDownX, mDownY;
     //界面滑动方向
@@ -418,7 +418,7 @@ public class CalendarView extends View {
                 //上个月界面
                 startX = -mViewBounds.x - mScrollDistance;
                 mRecycleDate.add(Calendar.MONTH, -1);
-                if (startX + mViewBounds.x > 0 || startX < mViewBounds.x) {
+                if (startX + mViewBounds.x > 0) {
                     year = mRecycleDate.get(Calendar.YEAR);
                     month = mRecycleDate.get(Calendar.MONTH);
                     drawMonth(canvas, startX, 0, year, month);
@@ -428,18 +428,16 @@ public class CalendarView extends View {
                 startX += mViewBounds.x;
                 mRecycleDate.set(Calendar.YEAR, mSelectedYear);
                 mRecycleDate.set(Calendar.MONTH, mSelectedMonth);
-                if (startX + mViewBounds.x > 0 || startX < mViewBounds.x) {
-                    year = mRecycleDate.get(Calendar.YEAR);
-                    month = mRecycleDate.get(Calendar.MONTH);
-                    drawMonth(canvas, startX, 0, year, month);
-                }
+                year = mRecycleDate.get(Calendar.YEAR);
+                month = mRecycleDate.get(Calendar.MONTH);
+                drawMonth(canvas, startX, 0, year, month);
 
                 //下个月界面
                 startX += mViewBounds.x;
                 mRecycleDate.set(Calendar.YEAR, mSelectedYear);
                 mRecycleDate.set(Calendar.MONTH, mSelectedMonth);
                 mRecycleDate.add(Calendar.MONTH, 1);
-                if (startX + mViewBounds.x > 0 || startX < mViewBounds.x) {
+                if (startX < mViewBounds.x) {
                     year = mRecycleDate.get(Calendar.YEAR);
                     month = mRecycleDate.get(Calendar.MONTH);
                     drawMonth(canvas, startX, 0, year, month);
@@ -451,7 +449,7 @@ public class CalendarView extends View {
                 //上个月
                 startY = -mViewBounds.y - mScrollDistance;
                 mRecycleDate.add(Calendar.MONTH, -1);
-                if (startY + mViewBounds.y > 0 || startY < mViewBounds.y) {
+                if (startY + mViewBounds.y > 0) {
                     year = mRecycleDate.get(Calendar.YEAR);
                     month = mRecycleDate.get(Calendar.MONTH);
                     drawMonth(canvas, 0, startY, year, month);
@@ -461,18 +459,16 @@ public class CalendarView extends View {
                 startY += mViewBounds.y;
                 mRecycleDate.set(Calendar.YEAR, mSelectedYear);
                 mRecycleDate.set(Calendar.MONTH, mSelectedMonth);
-                if (startY + mViewBounds.y > 0 || startY < mViewBounds.y) {
-                    year = mRecycleDate.get(Calendar.YEAR);
-                    month = mRecycleDate.get(Calendar.MONTH);
-                    drawMonth(canvas, 0, startY, year, month);
-                }
+                year = mRecycleDate.get(Calendar.YEAR);
+                month = mRecycleDate.get(Calendar.MONTH);
+                drawMonth(canvas, 0, startY, year, month);
 
                 //下个月
                 startY += mViewBounds.y;
                 mRecycleDate.set(Calendar.YEAR, mSelectedYear);
                 mRecycleDate.set(Calendar.MONTH, mSelectedMonth);
                 mRecycleDate.add(Calendar.MONTH, 1);
-                if (startY + mViewBounds.y > 0 || startY < mViewBounds.y) {
+                if (startY < mViewBounds.y) {
                     year = mRecycleDate.get(Calendar.YEAR);
                     month = mRecycleDate.get(Calendar.MONTH);
                     drawMonth(canvas, 0, startY, year, month);
@@ -536,17 +532,17 @@ public class CalendarView extends View {
         mDrawWork = new TipDrawable(Color.WHITE, Constant.DEFAULT_BACKGROUND_COLOR_RED, "班");
 
         //创建记录缓存月份数据的容器
-        mMonthSet = new HashSet<>(mCacheMonthCount);
+        mRecycleMonthStack = new Stack<>();
 
         //创建缓存月份数据的map
-        mDateMap = new SparseArrayCompat<>();
-        mCacheMonthCount = 3;
-        for (int i = 0; i < mCacheMonthCount; i++) {
+        mCacheDateMap = new SparseArrayCompat<>();
+        mCacheMonthCount = 5;
+        for (int i = 0; i < mCacheMonthCount + 2; i++) {
             SparseArrayCompat<DayCell> month = new SparseArrayCompat<>(31);
             for (int d = 1; d <= 31; d++) {
                 month.put(d, new DayCell());
             }
-            mDateMap.put(i, month);
+            mRecycleMonthStack.add(month);
         }
     }
 
@@ -558,6 +554,35 @@ public class CalendarView extends View {
             mViewBounds.set(getWidth(), getHeight());
             mCellWidth = mViewBounds.x / 7;
         }
+
+        if (mCacheDateMap.size() > mCacheMonthCount) {
+            int firstMonth = (mSelectedMonth - mCacheMonthCount / 2 + 12) % 12;
+            int secondMonth = (firstMonth + mCacheMonthCount) % 12;
+            if (firstMonth + mCacheMonthCount > 11) {
+                for (int i = secondMonth; i < firstMonth; i++) {
+                    SparseArrayCompat<DayCell> monthMap = mCacheDateMap.get(i);
+                    mCacheDateMap.remove(i);
+                    if (monthMap != null) {
+                        mRecycleMonthStack.add(monthMap);
+                    }
+                }
+            } else {
+                for (int i = 0; i < firstMonth; i++) {
+                    SparseArrayCompat<DayCell> monthMap = mCacheDateMap.get(i);
+                    mCacheDateMap.remove(i);
+                    if (monthMap != null) {
+                        mRecycleMonthStack.add(monthMap);
+                    }
+                }
+                for (int i = secondMonth; i < 12; i++) {
+                    SparseArrayCompat<DayCell> monthMap = mCacheDateMap.get(i);
+                    mCacheDateMap.remove(i);
+                    if (monthMap != null) {
+                        mRecycleMonthStack.add(monthMap);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -566,12 +591,6 @@ public class CalendarView extends View {
     private void handleAfterDraw() {
         //设置不强制清除缓存数据,便于月份缓存数据的复用
         mIsForceClearCache = false;
-        //清除之前缓存的月份数据
-        mMonthSet.clear();
-        //添加当前的已缓存的月份数据
-        mMonthSet.add(mSelectedMonth);
-        mMonthSet.add(mSelectedMonth - 1);
-        mMonthSet.add(mSelectedMonth + 1);
     }
 
     /**
@@ -751,7 +770,7 @@ public class CalendarView extends View {
             //绘制上个月的日期
             //肯定不需要换行的!!!!
             for (int i = day; i <= monthDay; i++) {
-                DayCell cell = mDateMap.get(month % mCacheMonthCount).get(i);
+                DayCell cell = mCacheDateMap.get(month).get(i);
                 if (computeIfCellCanSeen(startX, startY)) {
                     drawCell(canvas, startX, startY, cell, MONTH_STATUS_PRE);
                 }
@@ -780,7 +799,7 @@ public class CalendarView extends View {
                 startX = initX;
                 startY += mCacheHeight;
             }
-            DayCell cell = mDateMap.get(month % mCacheMonthCount).get(i);
+            DayCell cell = mCacheDateMap.get(month).get(i);
             if (computeIfCellCanSeen(startX, startY)) {
                 drawCell(canvas, startX, startY, cell, MONTH_STATUS_CURRENT);
             }
@@ -800,7 +819,7 @@ public class CalendarView extends View {
             updateMonthDate(year, month, 1, monthDay, true, true);
             //肯定不需要换行的!!!!
             for (int i = 1; i <= day; i++) {
-                DayCell cell = mDateMap.get(month % mCacheMonthCount).get(i);
+                DayCell cell = mCacheDateMap.get(month).get(i);
                 if (computeIfCellCanSeen(startX, startY)) {
                     drawCell(canvas, startX, startY, cell, MONTH_STATUS_NEXT);
                 }
@@ -823,12 +842,13 @@ public class CalendarView extends View {
         //若不需要强制更新数据并且缓存数据中存在当前的月份数据时,则不更新,节省计算资源
         //此处一般会在日期配置信息没有改动时触发(最典型为仅刷新当前月份而不是滑动界面)
         //或者当滑动界面时则仅会加载一次新的月份数据(在整个滑动周期中)
-        if (!mIsForceClearCache && mMonthSet.contains(month)) {
+        if (!mIsForceClearCache && mCacheDateMap.get(month) != null) {
             return;
         }
         mRecycleDate.set(year, month, fromDay);
 
         int begin = 0;
+        SparseArrayCompat<DayCell> monthMap = mRecycleMonthStack.pop();
         if (direction) {
             //若不包括第一天,则开始前先增加1天,排除掉第一天
             if (!isContainFirstDay) {
@@ -839,7 +859,6 @@ public class CalendarView extends View {
             //向后加载日期信息
             for (int i = 0; i < dayDistance; i++) {
                 int day = mRecycleDate.get(Calendar.DAY_OF_MONTH);
-                SparseArrayCompat<DayCell> monthMap = mDateMap.get(month % mCacheMonthCount);
                 DayCell outCell = monthMap.get(day);
                 //设置日期数据
                 setDayCell(outCell, mRecycleDate);
@@ -855,12 +874,12 @@ public class CalendarView extends View {
             //向前加载日期信息
             for (int i = 0; i < dayDistance; i++) {
                 int day = mRecycleDate.get(Calendar.DAY_OF_MONTH);
-
-                DayCell outCell = mDateMap.get(month % mCacheMonthCount).get(day);
+                DayCell outCell = monthMap.get(day);
                 setDayCell(outCell, mRecycleDate);
                 mRecycleDate.add(Calendar.DAY_OF_MONTH, -1);
             }
         }
+        mCacheDateMap.put(month, monthMap);
     }
 
     /**
