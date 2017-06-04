@@ -101,8 +101,6 @@ public class TipDrawable extends Drawable {
     public void draw(@NonNull Canvas canvas) {
         Rect bound = getBounds();
         if (bound.width() > 0 && bound.height() > 0) {
-            return;
-        } else {
             mDrawRect.set(bound);
             mDrawRect.offset(mDrawX, mDrawY);
             mPaint.setColor(mBgColor);
