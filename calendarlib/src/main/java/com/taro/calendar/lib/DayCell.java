@@ -147,4 +147,9 @@ public class DayCell {
             this.specialDateStatus &= ~mask;
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("%04d-%02d-%02d %s %s %s %s ", year, month, day, lunarDate, lunarFestival, solarFestival, solarTermFestival);
+    }
 }
