@@ -667,7 +667,7 @@ public class CalendarView extends View {
             year = mRecycleDate.get(Calendar.YEAR);
             //推算下月的日期
             monthDay = mRecycleDate.getActualMaximum(Calendar.DAY_OF_MONTH);
-            updateMonthDate(year, month, monthDay, 1, true, true);
+            updateMonthDate(year, month, 1, monthDay, true, true);
             //肯定不需要换行的!!!!
             for (int i = 1; i <= day; i++) {
                 DayCell cell = mDateMap.get(month % mCacheMonth).get(i);
