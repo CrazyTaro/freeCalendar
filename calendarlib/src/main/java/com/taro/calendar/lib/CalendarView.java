@@ -1221,6 +1221,7 @@ public class CalendarView extends View {
             status |= 0b010;
         }
         if (day >= 1 && day <= 31) {
+            //TODO:校验设置的日期
             mSelectedDay = day;
             status |= 0b100;
         }
