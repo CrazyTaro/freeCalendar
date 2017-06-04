@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.AttributeSet;
@@ -17,38 +18,19 @@ import android.view.View;
 import com.taro.calendar.lib.drawable.TipDrawable;
 import com.taro.calendar.lib.utils.Lunar;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Calendar;
 import java.util.Stack;
+
+import static android.R.attr.y;
+
 
 /**
  * Created by taro on 2017/6/1.
  */
 
 public class CalendarView extends View {
-    /**
-     * 默认次要字体颜色
-     */
-    public static final int DEFAULT_TEXT_COLOR_MINOR = Color.parseColor("#33000000");
-    /**
-     * 默认农历字体颜色
-     */
-    public static final int DEFAULT_TEXT_COLOR_LUNAR = Color.parseColor("#717171");
-    /**
-     * 默认周末字体颜色
-     */
-    public static final int DEFAULT_TEXT_COLOR_WEEKEND = Color.parseColor("#F06F28");
-    /**
-     * 默认节日字体颜色
-     */
-    public static final int DEFAULT_TEXT_COLOR_FESTIVAL = DEFAULT_TEXT_COLOR_WEEKEND;
-    /**
-     * 默认选中当天背景色
-     */
-    public static final int DEFAULT_BACKGROUND_SELECTED_DAY = Color.parseColor("#04A3E3");
-    /**
-     * 默认日历控件的背景色
-     */
-    public static final int DEFAULT_BACKGROUND_CALENDAR = Color.WHITE;
 
     /**
      * flag节日信息,是否显示节日
@@ -132,24 +114,8 @@ public class CalendarView extends View {
      */
     public static final int MASK_CALENDAR_TAG = 0b0001_0000_0000_0000;
 
-    //星期说明标题栏的字体颜色
-    private int mWeekTitleTextColor;
-    //周末颜色
-    private int mWeekendTextColor;
-    //节日颜色
-    private int mFestivalTextColor;
-    //农历颜色
-    private int mLunarTextColor;
-    //普通文字颜色
-    private int mNormalDateTextColor;
-    //次要文字颜色
-    private int mMinorDateTextColor;
-    //选中日期的背景色
-    private int mSelectDateTextColor;
-    //控件背景
-    private int mBackgroundColor;
-    //选中日期的背景色
-    private int mSelectDateBackground;
+    //所有颜色设置存储类
+    private ColorSetting mColor;
 
     //星期标题栏的高度
     private float mWeekTitleHeight;
@@ -400,7 +366,7 @@ public class CalendarView extends View {
         //初始化绘制前的数据
         initBeforeDraw();
         //绘制背景色
-        canvas.drawColor(mBackgroundColor);
+        canvas.drawColor(mColor.mBackgroundColor);
 
         float startX, startY;
         int year, month;
@@ -493,15 +459,7 @@ public class CalendarView extends View {
      * 数据初始化,基本的默认的数值及对象创建
      */
     private void init() {
-        mWeekTitleTextColor = DEFAULT_TEXT_COLOR_LUNAR;
-        mWeekendTextColor = DEFAULT_TEXT_COLOR_WEEKEND;
-        mFestivalTextColor = DEFAULT_TEXT_COLOR_FESTIVAL;
-        mLunarTextColor = DEFAULT_TEXT_COLOR_LUNAR;
-        mNormalDateTextColor = Color.BLACK;
-        mMinorDateTextColor = DEFAULT_TEXT_COLOR_MINOR;
-        mSelectDateTextColor = Color.WHITE;
-        mBackgroundColor = DEFAULT_BACKGROUND_CALENDAR;
-        mSelectDateBackground = DEFAULT_BACKGROUND_SELECTED_DAY;
+        mColor = new ColorSetting();
 
         //每周开始星期
         mWeekStartDay = Calendar.SUNDAY;
@@ -655,15 +613,6 @@ public class CalendarView extends View {
         } else {
             return -1;
         }
-    }
-
-    /**
-     * 获取当前日历的上部分未实际显示日期的高度(可能是星期标题等)
-     *
-     * @return
-     */
-    public float getExceptCalendarTopHeight() {
-        return getCalendarStatus(MASK_CALENDAR_WEEK_TITLE) ? mWeekTitleHeight : 0;
     }
 
     /**
@@ -949,13 +898,13 @@ public class CalendarView extends View {
             //计算出绘制区域的最小边(绘制工作只会在居中的正方形区域中进行)
             float minSize = Math.min(mCellWidth, mCacheHeight);
             //默认处理颜色值
-            int suggestColor = mNormalDateTextColor;
+            int suggestColor = mColor.mNormalDateTextColor;
             //节日颜色值
-            int fesTextColor = mFestivalTextColor;
+            int fesTextColor = mColor.mFestivalTextColor;
             //周末颜色值
-            int weekendColor = mWeekendTextColor;
+            int weekendColor = mColor.mWeekendTextColor;
             //农历颜色值
-            int lunarColor = mLunarTextColor;
+            int lunarColor = mColor.mLunarTextColor;
             //日期颜色值
             int dateTextColor = suggestColor;
 
@@ -966,14 +915,14 @@ public class CalendarView extends View {
             //若是绘制上个月或者下个月的数据
             if (monthStatus == MONTH_STATUS_PRE
                     || monthStatus == MONTH_STATUS_NEXT) {
-                dateTextColor = mMinorDateTextColor;
-                lunarColor = mMinorDateTextColor;
+                dateTextColor = mColor.mMinorDateTextColor;
+                lunarColor = mColor.mMinorDateTextColor;
                 //根据配置要求设置相应的字体颜色
                 if (getCalendarStatus(MASK_CALENDAR_MINOR_WEEKEND)) {
-                    weekendColor = mMinorDateTextColor;
+                    weekendColor = mColor.mMinorDateTextColor;
                 }
                 if (getCalendarStatus(MASK_CALENDAR_MINOR_FESTIVAL)) {
-                    fesTextColor = mMinorDateTextColor;
+                    fesTextColor = mColor.mMinorDateTextColor;
                 }
             }
             mDrawRect.set(startX, startY, startX + mCellWidth, startY + mCacheHeight);
@@ -983,8 +932,8 @@ public class CalendarView extends View {
             dateTextColor = cell.isWeekend() ? weekendColor : dateTextColor;
             //选中当天背景色
             if (monthStatus == MONTH_STATUS_CURRENT && computeIfIsSelectedDay(cell.getDay())) {
-                dateTextColor = mSelectDateTextColor;
-                mDatePaint.setColor(mSelectDateBackground);
+                dateTextColor = mColor.mSelectDateTextColor;
+                mDatePaint.setColor(mColor.mSelectDateBackgroundColor);
                 mDatePaint.setStyle(Paint.Style.FILL);
 
                 if (mBackgroundDraw != null) {
@@ -999,7 +948,7 @@ public class CalendarView extends View {
             }
             //今天日期轮廓
             if (cell.isToday(nowYear, nowMonth, nowDay)) {
-                mDatePaint.setColor(mSelectDateBackground);
+                mDatePaint.setColor(mColor.mSelectDateBackgroundColor);
                 mDatePaint.setStyle(Paint.Style.STROKE);
                 mDatePaint.setStrokeWidth(1.5f);
                 canvas.drawCircle(mDrawRect.centerX(), mDrawRect.centerY(), minSize / 2, mDatePaint);
@@ -1025,7 +974,7 @@ public class CalendarView extends View {
                 drawBottomDrawable(canvas, startX, startY, minSize, drawSize);
             } else {
                 //节日或者农历日期的绘制
-                drawFestivalOrLunarDate(canvas, cell, startX, startY, fesTextColor, mSelectDateTextColor, lunarColor, minSize);
+                drawFestivalOrLunarDate(canvas, cell, startX, startY, fesTextColor, mColor.mSelectDateTextColor, lunarColor, minSize);
             }
 
             tempX = startX + mCellWidth / 2 - minSize / 2;
@@ -1190,7 +1139,7 @@ public class CalendarView extends View {
     protected void drawWeekTitle(Canvas canvas, float startX, float startY, String[] weekItems) {
         int begin = mWeekStartDay;
         //设置星期绘制字体颜色
-        mDatePaint.setColor(mWeekTitleTextColor);
+        mDatePaint.setColor(mColor.mWeekTitleTextColor);
         for (int i = 0; i < 7; i++) {
             int index = (begin - 1) % 7;
             if (index >= 0 && index < 7) {
@@ -1235,6 +1184,171 @@ public class CalendarView extends View {
             canvas.drawText(text, tempX, tempY, paint);
         }
     }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef(value = {Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY})
+    public @interface Week {
+    }
+
+    /**
+     * 设置一周开始的星期
+     *
+     * @param day 该值只能是Calendar中week相关的数据
+     * @return
+     */
+    public CalendarView setWeekStartDay(@Week int day) {
+        mWeekStartDay = day;
+        return this;
+    }
+
+
+    /**
+     * 设置选中日期
+     *
+     * @param year
+     * @param month 月份从0开始,可使用{@link Calendar}中相关的月份常量
+     * @param day
+     * @return
+     */
+    public boolean setSelectedDate(int year, int month, int day) {
+        int status = 0;
+        if (year >= 1970 && year <= 2050) {
+            mSelectedYear = year;
+            status |= 0b001;
+        }
+        if (month >= 0 && month <= 11) {
+            mSelectedMonth = month;
+            status |= 0b010;
+        }
+        if (day >= 1 && day <= 31) {
+            mSelectedDay = day;
+            status |= 0b100;
+        }
+        return status == 0b111;
+    }
+
+    /**
+     * 设置选中年份
+     *
+     * @param year
+     * @return
+     */
+    public boolean setSelectedYear(int year) {
+        return setSelectedDate(year, mSelectedMonth, mSelectedDay);
+    }
+
+    /**
+     * 设置选中月份,月份从0开始,可使用{@link Calendar}中相关的月份常量
+     *
+     * @param month
+     * @return
+     */
+    public boolean setSelectedMonth(int month) {
+        return setSelectedDate(mSelectedYear, month, mSelectedDay);
+    }
+
+    /**
+     * 设置选中日期
+     *
+     * @param day
+     * @return
+     */
+    public boolean setSelectedDay(int day) {
+        return setSelectedDate(mSelectedYear, mSelectedMonth, day);
+    }
+
+    /**
+     * 获取选中年份
+     *
+     * @return
+     */
+    public int getSelectedYear() {
+        return mSelectedYear;
+    }
+
+    /**
+     * 获取选中月份
+     *
+     * @return
+     */
+    public int getSelectedMonth() {
+        return mSelectedMonth;
+    }
+
+    /**
+     * 获取选中日期
+     *
+     * @return
+     */
+    public int getSelectedDay() {
+        return mSelectedDay;
+    }
+
+
+    /**
+     * 设置固定的星期标题栏高度
+     *
+     * @param heightPx
+     * @return
+     */
+    public boolean setFixWeekTitleHeight(float heightPx) {
+        if (heightPx >= 0) {
+            mFixWeekTitleHeight = heightPx;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 获取颜色配置对象
+     *
+     * @return
+     */
+    public ColorSetting getColorSetting() {
+        return mColor;
+    }
+
+    /**
+     * 设置颜色配置对象
+     *
+     * @param color calendar所有使用到的字体颜色及背景色的配置对象
+     * @return
+     */
+    public CalendarView setColorSetting(ColorSetting color) {
+        if (color != null) {
+            mColor = color;
+            invalidate();
+        }
+        return this;
+    }
+
+    /**
+     * 重置为选中日期为今天并跳转到今天的日期
+     */
+    public CalendarView resetToToday() {
+        mTodayDate.setTimeInMillis(System.currentTimeMillis());
+        if (mSelectedYear != mTodayDate.get(Calendar.YEAR)) {
+            //强制刷新数据
+            mIsForceClearCache = true;
+        }
+        mSelectedYear = mTodayDate.get(Calendar.YEAR);
+        mSelectedMonth = mTodayDate.get(Calendar.MONTH);
+        mSelectedDay = mTodayDate.get(Calendar.DAY_OF_MONTH);
+        invalidate();
+        return this;
+    }
+
+
+    /**
+     * 获取当前日历的上部分未实际显示日期的高度(可能是星期标题等)
+     *
+     * @return
+     */
+    public float getExceptCalendarTopHeight() {
+        return getCalendarStatus(MASK_CALENDAR_WEEK_TITLE) ? mWeekTitleHeight : 0;
+    }
+
 
     /**
      * 重置日历配置为默认的配置信息
