@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.taro.calendar.lib.drawable.TipDrawable;
+import com.taro.calendar.lib.utils.DateUtils;
 import com.taro.calendar.lib.utils.Lunar;
 
 import java.lang.annotation.Retention;
@@ -848,6 +849,7 @@ public class CalendarView extends View {
         changedYear = changedDate.get(Calendar.YEAR);
         weekDay = changedDate.get(Calendar.DAY_OF_WEEK);
 
+        cell.reset();
         //公历日期
         cell.setDay(changedDay);
         cell.setMonth(changedMonth);
@@ -869,11 +871,11 @@ public class CalendarView extends View {
             cell.setSolarFestival(mRecycleLunar.getSFestivalName());
             //节气
             cell.setSolarTermFestival(mRecycleLunar.getTermString());
+        }
 
-            //根据节假日或者加班日设置数据
-            if (cell.isHoliday()) {
-                cell.setSpecialDate(DayCell.MASK_DATE_HOLIDAY, true);
-            }
+        //根据节假日或者加班日设置数据
+        if (mRecycleLunar.isHoliday()) {
+            cell.setSpecialDate(DayCell.MASK_DATE_HOLIDAY, true);
         }
     }
 
@@ -1220,8 +1222,10 @@ public class CalendarView extends View {
             mSelectedMonth = month;
             status |= 0b010;
         }
-        if (day >= 1 && day <= 31) {
-            //TODO:校验设置的日期
+
+        //获取该月最大日期数,若不合理则不设置
+        int maxDay = DateUtils.getNumDayOfMonth(year, month);
+        if (day >= 1 && day <= maxDay) {
             mSelectedDay = day;
             status |= 0b100;
         }
