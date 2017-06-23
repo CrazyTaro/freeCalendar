@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--节日相关的设置,可多个设置同时使用-->
+    <attr name="festivalFlag">
+        <flag name="showSolarTermFirst" value="64"/>
+        <flag name="showSolarFirst" value="32"/>
+        <flag name="showLunarFirst" value="16"/>
+        <flag name="solarTermShow" value="8"/>
+        <flag name="lunarShow" value="4"/>
+        <flag name="solarShow" value="2"/>
+        <flag name="festivalShow" value="1"/>
+    </attr>
+
+    <!--日历相关的设置,可多个设置同时使用-->
+    <attr name="calendarFlag">
+        <flag name="scrollVertical" value="2048"/>
+        <flag name="scrollHorizontal" value="1024"/>
+        <flag name="scrollEnable" value="512"/>
+        <flag name="weekTitleChinese" value="256"/>
+        <flag name="weekTitleHeightFix" value="128"/>
+        <flag name="weekTitleShow" value="64"/>
+        <flag name="minorFestivalColor" value="32"/>
+        <flag name="minorWeekendColor" value="16"/>
+        <flag name="lunarDateShow" value="8"/>
+        <flag name="nextMonthShow" value="4"/>
+        <flag name="previousMonthShow" value="2"/>
+    </attr>
+
+    <!--是否优先显示节气-->
+    <attr name="festivalShowSolarTermFirst" format="boolean"/>
+    <!--是否优先显示公历节日-->
+    <attr name="festivalShowSolarFirst" format="boolean"/>
+    <!--是否优先显示农历节日-->
+    <attr name="festivalShowLunarFirst" format="boolean"/>
+    <!--是否显示节气-->
+    <attr name="festivalSolarTermShow" format="boolean"/>
+    <!--是否显示农历节日-->
+    <attr name="festivalLunarShow" format="boolean"/>
+    <!--是否显示公历节日-->
+    <attr name="festivalSolarShow" format="boolean"/>
+    <!--是否显示节日-->
+    <attr name="festivalShow" format="boolean"/>
+
+    <!--是否启用上下滑动切换日历-->
+    <attr name="calendarScrollVertical" format="boolean"/>
+    <!--是否启用左右滑动切换日历-->
+    <attr name="calendarScrollHorizontal" format="boolean"/>
+    <!--是否启用滑动切换日历功能-->
+    <attr name="calendarScrollEnable" format="boolean"/>
+    <!--是否周期标题使用中文-->
+    <attr name="calendarWeekTitleChinese" format="boolean"/>
+    <!--是否使用固定周期标题高度-->
+    <attr name="calendarWeekTitleHeightFix" format="boolean"/>
+    <!--是否显示星期标题-->
+    <attr name="calendarWeekTitleShow" format="boolean"/>
+    <!--次要月份节日颜色是否使用次要颜色-->
+    <attr name="calendarMinorFestivalColor" format="boolean"/>
+    <!--次要月份周末颜色是否使用次要颜色-->
+    <attr name="calendarMinorWeekendColor" format="boolean"/>
+    <!--是否显示农历日期-->
+    <attr name="calendarLunarDateShow" format="boolean"/>
+    <!--是否显示下个月日期-->
+    <attr name="calendarNextMonthShow" format="boolean"/>
+    <!--是否显示上个月日期-->
+    <attr name="calendarPreMonthShow" format="boolean"/>
+
+    <!--设置一周开始时间-->
+    <attr name="startWeekDay" format="enum">
+        <enum name="sunday" value="1"/>
+        <enum name="monday" value="2"/>
+        <enum name="tuesday" value="3"/>
+        <enum name="wednesday" value="4"/>
+        <enum name="thursday" value="5"/>
+        <enum name="friday" value="6"/>
+        <enum name="saturday" value="7"/>
+    </attr>
+
+    <!--设置选中日期-->
+    <attr name="selectedDay" format="integer"/>
+    <!--设置底部的Drawable-->
+    <attr name="bottomDrawable" format="reference"/>
+    <!--设置节日提醒小图标-->
+    <attr name="festivalDrawable" format="reference"/>
+    <!--设置调休工作日提醒小图标-->
+    <attr name="workDrawable" format="reference"/>
+    <!--设置初始化的年份-->
+    <attr name="initYear" format="integer"/>
+    <!--设置初始化的月份-->
+    <attr name="initMonth" format="integer"/>
+    <!--设置初始化的日期-->
+    <attr name="initDay" format="integer"/>
+    <!--设置星期标题的固定高度-->
+    <attr name="weekTitleFixHeight" format="dimension|integer"/>
+    <!--设置日历背景色-->
+    <attr name="backgroundColor" format="color"/>
+    <!--设置每个日期的背景色-->
+    <attr name="dateBackgroundColor" format="color"/>
+    <!--设置默认的字体文本颜色-->
+    <attr name="defaultTextColor" format="color"/>
+    <!--设置次要的字体文本颜色-->
+    <attr name="minorTextColor" format="color"/>
+    <!--设置周末字体颜色-->
+    <attr name="weekendTextColor" format="color"/>
+    <!--设置节日字体颜色-->
+    <attr name="festivalTextColor" format="color"/>
+    <!--设置选中日期字体颜色-->
+    <attr name="selectedDayTextColor" format="color"/>
+    <!--设置今天字体颜色-->
+    <attr name="todayDayTextColor" format="color"/>
+    <!--设置选中日期背景色-->
+    <attr name="selectedBackgroundColor" format="color"/>
+    <!--设置今天背景色-->
+    <attr name="todayBackgroundColor" format="color"/>
+
+    <declare-styleable name="AbsCalendarView">
+        <attr name="festivalFlag"/>
+        <attr name="calendarFlag"/>
+        <attr name="festivalShowSolarTermFirst"/>
+        <attr name="festivalShowSolarFirst"/>
+        <attr name="festivalShowLunarFirst"/>
+        <attr name="festivalSolarTermShow"/>
+        <attr name="festivalLunarShow"/>
+        <attr name="festivalSolarShow"/>
+        <attr name="festivalShow"/>
+
+        <attr name="calendarScrollVertical"/>
+        <attr name="calendarScrollHorizontal"/>
+        <attr name="calendarScrollEnable"/>
+        <attr name="calendarWeekTitleChinese"/>
+        <attr name="calendarWeekTitleHeightFix"/>
+        <attr name="calendarWeekTitleShow"/>
+        <attr name="calendarMinorFestivalColor"/>
+        <attr name="calendarMinorWeekendColor"/>
+        <attr name="calendarLunarDateShow"/>
+        <attr name="calendarNextMonthShow"/>
+        <attr name="calendarPreMonthShow"/>
+
+        <attr name="startWeekDay"/>
+        <attr name="selectedDay"/>
+        <attr name="bottomDrawable"/>
+        <attr name="festivalDrawable"/>
+        <attr name="workDrawable"/>
+        <attr name="initYear"/>
+        <attr name="initMonth"/>
+        <attr name="initDay"/>
+        <attr name="weekTitleFixHeight"/>
+        <attr name="backgroundColor"/>
+        <attr name="dateBackgroundColor"/>
+        <attr name="defaultTextColor"/>
+        <attr name="minorTextColor"/>
+        <attr name="weekendTextColor"/>
+        <attr name="festivalTextColor"/>
+        <attr name="selectedDayTextColor"/>
+        <attr name="todayDayTextColor"/>
+        <attr name="selectedBackgroundColor"/>
+        <attr name="todayBackgroundColor"/>
+    </declare-styleable>
+</resources>
