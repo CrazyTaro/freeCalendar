@@ -7,7 +7,7 @@ package com.taro.calendar.lib;
 public class DayCell {
     public static final int MASK_DATE_HOLIDAY = 0b0001;
     public static final int MASK_DATE_WORK = 0b0010;
-    public static final int MASK_DATE_DRAWABLE = 0b0100;
+    public static final int MASK_DATE_BOTTOM_DRAWABLE = 0b0100;
 
     //年
     private int year;

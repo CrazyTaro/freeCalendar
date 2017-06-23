@@ -14,7 +14,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.taro.calendar.lib.Constant;
+import com.taro.calendar.lib.ColorSetting;
 
 /**
  * Created by taro on 2017/6/2.
@@ -30,7 +30,7 @@ public class StopDrawable extends Drawable {
     private float mDrawX, mDrawY;
 
     public StopDrawable() {
-        this(Constant.DEFAULT_BACKGROUND_COLOR_BLUE, Color.TRANSPARENT, 2);
+        this(ColorSetting.DEFAULT_COLOR_BLUE, Color.TRANSPARENT, 2);
     }
 
     public StopDrawable(@ColorInt int storkeColor, @ColorInt int fillColor,

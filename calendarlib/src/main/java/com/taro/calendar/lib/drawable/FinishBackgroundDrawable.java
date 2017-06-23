@@ -16,7 +16,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.taro.calendar.lib.Constant;
+import com.taro.calendar.lib.ColorSetting;
 
 /**
  * Created by taro on 2017/6/2.
@@ -31,7 +31,7 @@ public class FinishBackgroundDrawable extends Drawable {
     private Path mPath;
 
     public FinishBackgroundDrawable() {
-        this(Constant.DEFAULT_BACKGROUND_COLOR_BLUE, 5);
+        this(ColorSetting.DEFAULT_COLOR_BLUE, 5);
     }
 
     public FinishBackgroundDrawable setFillColor(@ColorInt int color) {

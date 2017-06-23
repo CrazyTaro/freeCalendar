@@ -13,7 +13,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.taro.calendar.lib.Constant;
+import com.taro.calendar.lib.ColorSetting;
 
 
 /**
@@ -21,21 +21,29 @@ import com.taro.calendar.lib.Constant;
  */
 public class TipDrawable extends Drawable {
     private Paint mPaint;
-    private String mText;
-    private float mTextSize;
-    private int mTextColor;
-    private int mBgColor;
-    private RectF mDrawRect;
+    protected String mText;
+    protected float mTextSize;
+    protected int mTextColor;
+    protected int mBgColor;
     private int mOldBoundWidth;
     private int mOldBoundHeight;
+    private RectF mDrawRectf;
 
-    private float mDrawX;
-    private float mDrawY;
-
+    /**
+     * 创建一个TipDrawable,创建后可以不手动设置{@link #setBounds(int, int, int, int)},因为会默认调用<br>
+     * 默认颜色为白色,背景色为蓝色,文本为中文文本(一般都需要重新设置文本的)
+     */
     public TipDrawable() {
-        this(Color.WHITE, Constant.DEFAULT_BACKGROUND_COLOR_BLUE, "假");
+        this(Color.WHITE, ColorSetting.DEFAULT_COLOR_BLUE, "假");
     }
 
+    /**
+     * 创建一个TipDrawable,创建后可以不手动设置{@link #setBounds(int, int, int, int)},因为会默认调用
+     *
+     * @param textColor 文本颜色
+     * @param bgColor   背景色
+     * @param text      文本内容,不建议使用很长的文本,文本仅会显示一行
+     */
     public TipDrawable(@ColorInt int textColor, @ColorInt int bgColor, @Nullable String text) {
         mText = text;
         mTextColor = textColor;
@@ -43,26 +51,91 @@ public class TipDrawable extends Drawable {
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mDrawRect = new RectF();
+        mDrawRectf = new RectF();
 
         setBounds(0, 0, 16, 16);
     }
 
-    public TipDrawable setDrawXY(float x, float y) {
-        mDrawX = x;
-        mDrawY = y;
+    /**
+     * 设置绘制的XY
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public TipDrawable updateDrawXY(float x, float y) {
+        getBounds().offset((int) x, (int) y);
         return this;
     }
 
+    /**
+     * 设置文本
+     *
+     * @param text
+     * @return
+     */
     public TipDrawable setText(@Nullable String text) {
         mText = text;
-        onBoundsChange(getBounds());
+        Rect rect = getBounds();
+        computeTextSize(rect.width(), rect.height());
         return this;
     }
 
+    /**
+     * 设置文本的颜色
+     *
+     * @param color
+     * @return
+     */
     public TipDrawable setTextColor(@ColorInt int color) {
         mTextColor = color;
         return this;
+    }
+
+    /**
+     * 是否改变文本当语言改变时
+     *
+     * @param isEnglish
+     * @return
+     */
+    public void updateTextWhenLanguageChanged(boolean isEnglish, @NonNull String text) {
+        setText(text);
+    }
+
+    //计算文本字体,当文本改动和图标大小改变时都应该重新计算
+    private void computeTextSize(int width, int height) {
+        if (mText != null && mText.length() > 0) {
+            mTextSize = width * 5f / (7 * mText.length());
+            if (mTextSize > height) {
+                mTextSize = height * 5f / 7;
+            }
+        }
+    }
+
+    /**
+     * 绘制图标背景
+     *
+     * @param canvas
+     * @param drawArea 图标绘制区域
+     * @param paint    已经设置好背景颜色
+     */
+    protected void drawBackground(Canvas canvas, @NonNull RectF drawArea, Paint paint) {
+        canvas.drawArc(drawArea,
+                0, 360, true, paint);
+    }
+
+    /**
+     * 绘制文本,仅在文本存在和有效时会被调用
+     *
+     * @param canvas
+     * @param drawArea   整个图标的绘制区域
+     * @param text       绘制文本
+     * @param recommendX 推荐绘制X坐标,此为文本的中心X坐标(centerX)
+     * @param recommendY 推荐绘制Y坐标,此为文本的中心Y坐标
+     * @param paint      已经设置好文本字体大小及颜色
+     */
+    protected void drawText(Canvas canvas, @NonNull RectF drawArea, @NonNull String text, float recommendX, float recommendY, Paint paint) {
+        canvas.drawText(text, recommendX, recommendY, paint);
     }
 
     @Override
@@ -89,26 +162,21 @@ public class TipDrawable extends Drawable {
         if (width == 0 || height == 0
                 || (mOldBoundWidth == width && mOldBoundHeight == height)) {
             return;
-        } else if (mText != null && mText.length() > 0) {
-            mTextSize = width * 5f / (7 * mText.length());
-            if (mTextSize > height) {
-                mTextSize = height * 5f / 7;
-            }
         }
+        computeTextSize(width, height);
     }
 
     @Override
     public void draw(@NonNull Canvas canvas) {
         Rect bound = getBounds();
         if (bound.width() > 0 && bound.height() > 0) {
-            mDrawRect.set(bound);
-            mDrawRect.offset(mDrawX, mDrawY);
             mPaint.setColor(mBgColor);
-            canvas.drawArc(mDrawRect, 0, 360, true, mPaint);
+            mDrawRectf.set(bound);
+            drawBackground(canvas, mDrawRectf, mPaint);
 
             if (mText != null && mText.length() > 0) {
                 if (mTextSize == 0) {
-                    onBoundsChange(getBounds());
+                    computeTextSize(bound.width(), bound.height());
                 }
                 mPaint.setColor(mTextColor);
                 mPaint.setTextSize(mTextSize);
@@ -116,7 +184,7 @@ public class TipDrawable extends Drawable {
                 float length = mPaint.measureText(mText);
                 float x = (bound.width() - length) / 2;
                 float y = (bound.height() / 2) + (fm.bottom - fm.top) / 2 - fm.bottom;
-                canvas.drawText(mText, mDrawX + x, mDrawY + y, mPaint);
+                drawText(canvas, mDrawRectf, mText, x, y, mPaint);
             }
         }
     }
