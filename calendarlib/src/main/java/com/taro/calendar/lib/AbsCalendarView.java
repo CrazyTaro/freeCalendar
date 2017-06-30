@@ -1,5 +1,9 @@
 package com.taro.calendar.lib;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -17,6 +21,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import com.taro.calendar.lib.callback.IActionCallback;
 import com.taro.calendar.lib.callback.IDrawCallback;
@@ -185,6 +190,8 @@ public abstract class AbsCalendarView extends View {
     private int mScrollDirection = SCROLL_AXIS_NONE;
     //界面滑动距离,决定了最终是否切换月份
     private float mScrollDistance;
+    //是否正在切换动画过程
+    private boolean mIsScrollAnim;
     private long mDownTime;
 
     //当前显示界面的日期单元高度
@@ -271,7 +278,9 @@ public abstract class AbsCalendarView extends View {
                 return true;
             case MotionEvent.ACTION_MOVE:
                 //若允许滑动,则尝试进行滑动事件处理
-                if (getCalendarStatus(MASK_CALENDAR_SCROLL_ENABLE)) {
+                if (getCalendarStatus(MASK_CALENDAR_SCROLL_ENABLE)
+                        //当前未进行滑动动画
+                        && !mIsScrollAnim) {
                     float x = event.getX();
                     float y = event.getY();
                     float distanceX = mDownX - x;
@@ -322,7 +331,9 @@ public abstract class AbsCalendarView extends View {
                 }
 
                 //若允许进行滑动,则尝试处理滑动事件
-                if (getCalendarStatus(MASK_CALENDAR_SCROLL_ENABLE)) {
+                if (getCalendarStatus(MASK_CALENDAR_SCROLL_ENABLE)
+                        //当前未进行滑动动画
+                        && !mIsScrollAnim) {
                     //水平滑动方向
                     if (mScrollDirection == SCROLL_AXIS_HORIZONTAL) {
                         //计算最新的滑动距离
@@ -330,24 +341,27 @@ public abstract class AbsCalendarView extends View {
                         //若滑动距离超过1/3则进行切换
                         if (mScrollDistance <= -mViewBounds.x / 3) {
                             //切换到下个月
-                            switch2NewMonth(false);
+                            startScrollAnim(mScrollDistance, -mViewBounds.x, -1);
                         } else if (mScrollDistance >= mViewBounds.x / 3) {
                             //切换到上个月
-                            switch2NewMonth(true);
+                            startScrollAnim(mScrollDistance, mViewBounds.x, 1);
+                        } else {
+                            //滑动回原来的位置
+                            startScrollAnim(mScrollDistance, 0, 0);
                         }
                     } else if (mScrollDirection == SCROLL_AXIS_VERTICAL) {
                         //垂直滑动方向
                         mScrollDistance = mDownY - event.getY();
                         if (mScrollDistance <= -mViewBounds.y / 3) {
-                            switch2NewMonth(false);
+                            startScrollAnim(mScrollDistance, -mViewBounds.y, -1);
                         } else if (mScrollDistance >= mViewBounds.y / 3) {
-                            switch2NewMonth(true);
+                            startScrollAnim(mScrollDistance, mViewBounds.y, 1);
+                        } else {
+                            //滑动回原来的位置
+                            startScrollAnim(mScrollDistance, 0, 0);
                         }
                     }
                 }
-                //滑动方向重置
-                mScrollDirection = SCROLL_AXIS_NONE;
-                mScrollDistance = 0;
                 //刷新界面
                 invalidate();
                 break;
@@ -467,6 +481,57 @@ public abstract class AbsCalendarView extends View {
 
         //绘制后的数据重置及处理
         handleAfterDraw();
+    }
+
+    /**
+     * 开始滑动动画
+     *
+     * @param from     开始滑动位置
+     * @param to       结束位置
+     * @param Up2Month 是否更新月份信息,0不更新,正数切换为下一月份,负数切换为上一月份
+     */
+    protected void startScrollAnim(float from, float to, final int Up2Month) {
+        //创建滑动动画
+        ObjectAnimator anim = ObjectAnimator
+                .ofFloat(this, "scroll", from, to)
+                .setDuration(500);
+        //插值器
+        anim.setInterpolator(new DecelerateInterpolator());
+        //动画更新代码
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //更新滑动距离,刷新界面
+                float value = (float) animation.getAnimatedValue();
+                mScrollDistance = value;
+                invalidate();
+            }
+        });
+        //动画开始与结束监听
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                //开始动画,设置动画标识,不允许其它任何滑动操作
+                mIsScrollAnim = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                //动画结束,还原标识
+                mIsScrollAnim = false;
+                //根据切换状态更新月份数据
+                if (Up2Month != 0) {
+                    switch2NewMonth(Up2Month > 0);
+                }
+                //重置滑动的操作
+                mScrollDirection = SCROLL_AXIS_NONE;
+                mScrollDistance = 0;
+                invalidate();
+            }
+        });
+        anim.start();
     }
 
     /**
