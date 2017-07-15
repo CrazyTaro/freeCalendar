@@ -13,6 +13,7 @@
 
     <!--日历相关的设置,可多个设置同时使用-->
     <attr name="calendarFlag">
+        <flag name="scrollNoAnimation" value="8192"/>
         <flag name="dateInCenter" value="4096"/>
         <flag name="scrollVertical" value="2048"/>
         <flag name="scrollHorizontal" value="1024"/>
@@ -66,6 +67,8 @@
     <attr name="calendarPreMonthShow" format="boolean"/>
     <!--是否居中显示日期-->
     <attr name="calendarDateInCenter" format="boolean"/>
+    <!--是否滑动切换不使用动画-->
+    <attr name="calendarScrollNoAnimation" format="boolean"/>
 
     <!--设置一周开始时间-->
     <attr name="startWeekDay" format="enum">
@@ -143,6 +146,7 @@
         <attr name="calendarNextMonthShow"/>
         <attr name="calendarPreMonthShow"/>
         <attr name="calendarDateInCenter"/>
+        <attr name="calendarScrollNoAnimation"/>
 
         <attr name="startWeekDay"/>
         <attr name="selectedDay"/>
