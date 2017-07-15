@@ -14,7 +14,7 @@ github上已经存在很多很不错的日历控件.但是绝大多数的特点�
 
 ---
 
-- 文本居中
+- 文本居中(仔细看主要的元素都集中在下半部分,可能会感觉有点挤)
 
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/date_in_center.png)
 
@@ -32,7 +32,7 @@ github上已经存在很多很不错的日历控件.但是绝大多数的特点�
 
 ---
 
-- 简洁文本居中
+- 简洁文本居中(日期显示居中,会显得清楚端正)
 
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/simple_date_in_center.png)
 
@@ -104,7 +104,7 @@ dependencies {
 
 |属性名称|属性意义|属性值类型|
 |--|--|--|
-|festivalShowSolarTermFirst|是否优先显示节气|false
+|festivalShowSolarTermFirst|是否优先显示节气|false|
 |festivalShowSolarFirst|是否优先显示公历节日|
 |festivalShowLunarFirst|是否优先显示农历节日|
 |festivalSolarTermShow|是否显示节气|
@@ -117,7 +117,7 @@ dependencies {
 
 |属性名称|属性意义|属性值类型|
 |--|--|--|
-|calendarScrollVertical|是否允许纵向滑动|false
+|calendarScrollVertical|是否允许纵向滑动|false|
 |calendarScrollHorizontal|是否允许横向滑动|
 |calendarScrollEnable|是否允许滑动|
 |calendarWeekTitleChinese|是否使用中文的周末标题|
@@ -153,7 +153,7 @@ dependencies {
 - 颜色相关属性
 |属性名称|属性意义|属性值类型|
 |--|--|--|
-|backgroundColor|背景色|color
+|backgroundColor|背景色|color|
 |dateBackgroundColor|文本背景色|
 |defaultTextColor|默认文本颜色|
 |minorTextColor|次要文本颜色|
@@ -164,21 +164,20 @@ dependencies {
 |selectedBackgroundColor|选中日期背景色|
 |todayBackgroundColor|今天背景色|
 
-
 - 其它样式相关属性
 |属性名称|属性意义|属性值类型|
 |--|--|--|
-|startWeekDay|一周开始的时间|enum,直接使用`sunday`等声明
-|selectedDay|当前选中日期(仅天)|integer
-|bottomDrawable|日历底部的drawable|reference
-|festivalDrawable|节日(假期)drawable`废弃`|reference
-|workDrawable|加班drawable`废弃`|reference
-|initYear|初始年份|integer
-|initMonth|初始月份|integer
-|initDay|初始日期|integer
-|weekTitleFixHeight|周末标题的固定高度|dimen
-|horizontalScrollRate|横向滑动切换界面的触发比率|float,0-1
-|verticalScrollRate|垂直滑动切换界面的触发比率|float,0-1
+|startWeekDay|一周开始的时间|enum,直接使用`sunday`等声明|
+|selectedDay|当前选中日期(仅天)|integer|
+|bottomDrawable|日历底部的drawable|reference|
+|festivalDrawable|节日(假期)drawable`废弃`|reference|
+|workDrawable|加班drawable`废弃`|reference|
+|initYear|初始年份|integer|
+|initMonth|初始月份|integer|
+|initDay|初始日期|integer|
+|weekTitleFixHeight|周末标题的固定高度|dimen|
+|horizontalScrollRate|横向滑动切换界面的触发比率|float,0-1|
+|verticalScrollRate|垂直滑动切换界面的触发比率|float,0-1|
 
 部分属性说明如下:
 1.节日及加班drawable是针对国内常见的节日及加班调休的机制,可以在日历中显示出当天是否节日或者是否需要加班;该属性不可用是因为该drawable的类型必须是`TipDrawable`;当需要完全自定义该图标的UI时,可在drawHelper中自行处理
@@ -202,7 +201,7 @@ UI的绘制是通过`IDrawCallback`接口进行回调的.即使是默认可直�
 - 接口方法及参数说明
 |方法名称|返回值|说明|
 |--|--|--|
-|createDayCell|DayCell|创建日期对象,日期对象必须是{@link DayCell},此部分的日期对象是缓存并且会被复用的|
+|createDayCell|DayCell|创建日期对象,日期对象必须是`DayCell`,此部分的日期对象是缓存并且会被复用的|
 |updateDayCellAfterNewSetting|-|在设置日期对象数据后回调,需要对日期对象相关数据处理时可在此接口进行处理|
 |beforeCellDraw|-|某个具体日期绘制前的回调,提供该日期绘制期间不变的参数及信息;若需要在最底层绘制自定义的某些界面或数据也可以在此处绘制处理;此绘制所有绘制的界面与其它绘制内容重叠部分会被覆盖|
 |afterCellDraw|-|某个具体日期绘制后的回调,在该日期最顶层需要绘制自定义界面或数据可以在此处绘制;此处所有绘制界面会覆盖其它任何绘制内容|
