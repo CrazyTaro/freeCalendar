@@ -13,6 +13,7 @@
 
     <!--日历相关的设置,可多个设置同时使用-->
     <attr name="calendarFlag">
+        <flag name="dateInCenter" value="4096"/>
         <flag name="scrollVertical" value="2048"/>
         <flag name="scrollHorizontal" value="1024"/>
         <flag name="scrollEnable" value="512"/>
@@ -63,6 +64,8 @@
     <attr name="calendarNextMonthShow" format="boolean"/>
     <!--是否显示上个月日期-->
     <attr name="calendarPreMonthShow" format="boolean"/>
+    <!--是否居中显示日期-->
+    <attr name="calendarDateInCenter" format="boolean"/>
 
     <!--设置一周开始时间-->
     <attr name="startWeekDay" format="enum">
@@ -91,6 +94,11 @@
     <attr name="initDay" format="integer"/>
     <!--设置星期标题的固定高度-->
     <attr name="weekTitleFixHeight" format="dimension|integer"/>
+    <!--设置横向滑动切换界面距离比-->
+    <attr name="horizontalScrollRate" format="float"/>
+    <!--设置垂直滑动切换界面距离比-->
+    <attr name="verticalScrollRate" format="float"/>
+
     <!--设置日历背景色-->
     <attr name="backgroundColor" format="color"/>
     <!--设置每个日期的背景色-->
@@ -134,6 +142,7 @@
         <attr name="calendarLunarDateShow"/>
         <attr name="calendarNextMonthShow"/>
         <attr name="calendarPreMonthShow"/>
+        <attr name="calendarDateInCenter"/>
 
         <attr name="startWeekDay"/>
         <attr name="selectedDay"/>
@@ -144,6 +153,9 @@
         <attr name="initMonth"/>
         <attr name="initDay"/>
         <attr name="weekTitleFixHeight"/>
+        <attr name="horizontalScrollRate"/>
+        <attr name="verticalScrollRate"/>
+
         <attr name="backgroundColor"/>
         <attr name="dateBackgroundColor"/>
         <attr name="defaultTextColor"/>
