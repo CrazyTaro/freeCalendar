@@ -82,7 +82,7 @@ allprojects {
 最新版本: [![](https://www.jitpack.io/v/CrazyTaro/freeCalendar.svg)](https://www.jitpack.io/#CrazyTaro/freeCalendar)
 ```
 dependencies {
-        compile 'com.github.CrazyTaro:freeCalendar:lasest_release'
+        compile 'com.github.CrazyTaro:freeCalendar:latest_release'
 }
 ```
 
