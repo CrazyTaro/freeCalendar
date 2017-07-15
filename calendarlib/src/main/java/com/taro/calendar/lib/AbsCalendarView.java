@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.FloatRange;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -115,6 +116,10 @@ public abstract class AbsCalendarView extends View {
      * flag日期信息,是否允许滑动
      */
     public static final int MASK_CALENDAR_SCROLL_VERTICAL = 1 << 11;
+    /**
+     * 日期文本居中显示,不居中时则会偏上显示
+     */
+    public static final int MASK_CALENDAR_DATE_IN_CENTER = 1 << 12;
 
     //所有颜色设置存储类
     private ColorSetting mColor;
@@ -192,6 +197,9 @@ public abstract class AbsCalendarView extends View {
     private float mScrollDistance;
     //是否正在切换动画过程
     private boolean mIsScrollAnim;
+    //滑动切换的比例,默认为宽的0.3f,高的0.3f
+    private float mScrollHorRate, mScrollVerticalRate;
+    //触摸按下的时间
     private long mDownTime;
 
     //当前显示界面的日期单元高度
@@ -339,10 +347,10 @@ public abstract class AbsCalendarView extends View {
                         //计算最新的滑动距离
                         mScrollDistance = mDownX - event.getX();
                         //若滑动距离超过1/3则进行切换
-                        if (mScrollDistance <= -mViewBounds.x / 3) {
+                        if (mScrollDistance <= -mViewBounds.x * mScrollHorRate) {
                             //切换到下个月
                             startScrollAnim(mScrollDistance, -mViewBounds.x, -1);
-                        } else if (mScrollDistance >= mViewBounds.x / 3) {
+                        } else if (mScrollDistance >= mViewBounds.x * mScrollHorRate) {
                             //切换到上个月
                             startScrollAnim(mScrollDistance, mViewBounds.x, 1);
                         } else {
@@ -352,9 +360,9 @@ public abstract class AbsCalendarView extends View {
                     } else if (mScrollDirection == SCROLL_AXIS_VERTICAL) {
                         //垂直滑动方向
                         mScrollDistance = mDownY - event.getY();
-                        if (mScrollDistance <= -mViewBounds.y / 3) {
+                        if (mScrollDistance <= -mViewBounds.y * mScrollVerticalRate) {
                             startScrollAnim(mScrollDistance, -mViewBounds.y, -1);
-                        } else if (mScrollDistance >= mViewBounds.y / 3) {
+                        } else if (mScrollDistance >= mViewBounds.y * mScrollVerticalRate) {
                             startScrollAnim(mScrollDistance, mViewBounds.y, 1);
                         } else {
                             //滑动回原来的位置
@@ -544,6 +552,7 @@ public abstract class AbsCalendarView extends View {
         if (context != null && set != null) {
             TypedArray ta = context.obtainStyledAttributes(set, R.styleable.AbsCalendarView);
             int value;
+            float valueFloat;
             Drawable drawable;
             value = ta.getInt(R.styleable.AbsCalendarView_festivalFlag, -1);
             if (value != -1) {
@@ -707,6 +716,15 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
+            value = ta.getInt(R.styleable.AbsCalendarView_calendarDateInCenter, Integer.MIN_VALUE);
+            if (value != Integer.MIN_VALUE) {
+                if (value != 0) {
+                    addCalendarFlag(MASK_CALENDAR_DATE_IN_CENTER);
+                } else {
+                    removeCalendarFlag(MASK_CALENDAR_DATE_IN_CENTER);
+                }
+            }
+
             value = ta.getInt(R.styleable.AbsCalendarView_startWeekDay, -1);
             if (value != -1) {
                 switch (value) {
@@ -769,10 +787,16 @@ public abstract class AbsCalendarView extends View {
                 setSelectedDay(value);
             }
 
-            float height = ta.getDimensionPixelSize(R.styleable.AbsCalendarView_weekTitleFixHeight, -1);
-            if (height != -1) {
-                setFixWeekTitleHeight(height);
+            valueFloat = ta.getDimensionPixelSize(R.styleable.AbsCalendarView_weekTitleFixHeight, -1);
+            if (valueFloat != -1) {
+                setFixWeekTitleHeight(valueFloat);
             }
+
+            valueFloat = ta.getFloat(R.styleable.AbsCalendarView_horizontalScrollRate, -1);
+            setScrollRate(true, valueFloat);
+
+            valueFloat = ta.getFloat(R.styleable.AbsCalendarView_verticalScrollRate, -1);
+            setScrollRate(false, valueFloat);
 
             value = ta.getColor(R.styleable.AbsCalendarView_backgroundColor, mColor.mBackgroundColor);
             mColor.mBackgroundColor = value;
@@ -826,6 +850,10 @@ public abstract class AbsCalendarView extends View {
         resetFestivalStatus();
         //日期信息,默认显示次要月份,并且次要月份全部不高亮,显示农历日期及周末标题栏
         resetCalendarStatus();
+
+        //默认的横向/纵向滑动切换触发比例
+        mScrollHorRate = 0.3f;
+        mScrollVerticalRate = 0.3f;
 
         mViewBounds = new PointF();
         mRecyclePoint = new PointF();
@@ -1057,7 +1085,7 @@ public abstract class AbsCalendarView extends View {
         mRecycleDate.add(Calendar.MONTH, isIncreased ? 1 : -1);
         int newYear = mRecycleDate.get(Calendar.YEAR);
         int newMonth = mRecycleDate.get(Calendar.MONTH);
-        int newDay = mRecycleDate.get(Calendar.DAY_OF_MONTH);
+        int newDay = mRecycleDate.getActualMaximum(Calendar.DAY_OF_MONTH);
         //选中日期超过当月日期最大范围,设置为当月最大日期
         if (mSelectedDay <= newDay) {
             newDay = mSelectedDay;
@@ -1291,6 +1319,7 @@ public abstract class AbsCalendarView extends View {
         } else {
             int nowYear, nowMonth, nowDay;
             float tempX, tempY, centerX, centerY;
+            float dateTextSize, textBottom;
             //计算出绘制区域的最小边(绘制工作只会在居中的正方形区域中进行)
             float minSize = Math.min(mCellWidth, mCacheHeight);
             //默认处理颜色值
@@ -1310,6 +1339,8 @@ public abstract class AbsCalendarView extends View {
 
             boolean isSelectedDay = computeIfIsSelectedDay(cell.getDay());
             boolean isToday = cell.isToday(nowYear, nowMonth, nowDay);
+            String day = String.format("%1$02d", cell.getDay());
+            dateTextSize = minSize * 2f / 5;
 
             //若是绘制上个月或者下个月的数据
             if (monthStatus == MONTH_STATUS_PRE
@@ -1328,7 +1359,7 @@ public abstract class AbsCalendarView extends View {
             centerX = mDrawRect.centerX();
             centerY = mDrawRect.centerY();
             //绘制之前的基本相关数据及设置,也可以进行预置的一些绘制操作
-            mDrawCallback.beforeCellDraw(mDrawRect, mColor, cell, minSize, canvas, mDatePaint);
+            mDrawCallback.beforeCellDraw(mDrawRect, mColor, cell, minSize, dateTextSize, canvas, mDatePaint);
 
             //若周末文本则使用周末文本颜色
             //此参数在这里设置是因为后面有可能日期是被选中日期,则文本颜色为白色
@@ -1358,32 +1389,41 @@ public abstract class AbsCalendarView extends View {
             }
 
             //日期文本
-            String day = String.format("%1$02d", cell.getDay());
-            float dateTextSize = minSize * 2f / 5;
             mDatePaint.setStyle(Paint.Style.FILL);
             mDatePaint.setColor(dateTextColor);
             mDatePaint.setTextAlign(Paint.Align.CENTER);
             mDatePaint.setTextSize(dateTextSize);
 
+            Paint.FontMetrics fm = mDatePaint.getFontMetrics();
             tempX = startX + mCellWidth / 2;
-            tempY = startY + mCacheHeight / 2;
+            if (getCalendarStatus(MASK_CALENDAR_DATE_IN_CENTER)) {
+                //居中位置的文本
+                tempY = startY + mCacheHeight / 2 + (fm.bottom - fm.top) / 2 - fm.bottom;
+            } else {
+                //偏上位置的文本,当有农历或者节日时此显示方向会更适合
+                tempY = startY + mCacheHeight / 2;
+            }
+            textBottom = tempY + fm.bottom;
             mDrawCallback.drawDateText(canvas, isToday, isSelectedDay, dateTextColor, dateTextSize, tempX, tempY, day, mDatePaint);
 
             //计算drawable图标的大小
-            int drawSize = (int) (minSize / 2 - dateTextSize / 2);
+            int drawSize = (int) (minSize + startY - textBottom);
             //底部的小图标与农历日期只能存在一个,没有足够的空间可以同时存在
             //绘制底部的图片
             if (mDrawCallback.isNeedDrawBottomDrawable(cell)) {
                 //绘制图标的X位置,left
                 tempX = startX + mCellWidth / 2 - drawSize / 2;
                 //绘制图标的Y位置,top
-                tempY = startY + mCacheHeight / 2 + ((mCacheHeight / 2 - drawSize)) / 2;
+                tempY = textBottom;
                 //绘制图标的区域
                 mRecycleRectf.set(tempX, tempY, tempX + drawSize, tempY + drawSize);
                 mDrawCallback.drawBottomDrawable(canvas, isToday, isSelectedDay, mBottomBmp, mBottomDraw, mRecycleRectf, mDatePaint);
             } else {
+                //计算出下方可绘制节日文本的最大高度
+                float recommendMaxHeight = centerY + minSize / 2 - textBottom;
                 //节日或者农历日期的绘制
-                innerDrawFestivalOrLunarDate(canvas, cell, isToday, isSelectedDay, startX, startY, fesTextColor, mColor.mSelectDateTextColor, lunarColor, minSize);
+                innerDrawFestivalOrLunarDate(canvas, cell, isToday, isSelectedDay, startX, textBottom,
+                        fesTextColor, mColor.mSelectDateTextColor, lunarColor, minSize, recommendMaxHeight);
             }
 
             tempX = startX + mCellWidth / 2 - minSize / 2;
@@ -1408,18 +1448,19 @@ public abstract class AbsCalendarView extends View {
      * 绘制节日或者是农历日期,取决于日期配置信息
      *
      * @param canvas
-     * @param cell              日期对象
-     * @param isToday           是否今天
-     * @param isSelected        是否选中日期
-     * @param startX            开始绘制X位置
-     * @param startY            开始绘制Y位置
-     * @param fesTextColor      节日字体颜色
-     * @param selectedDateColor 选中日期字体颜色
-     * @param lunarColor        农历字体颜色
-     * @param cellMinSize       绘制区域的最小值
+     * @param cell               日期对象
+     * @param isToday            是否今天
+     * @param isSelected         是否选中日期
+     * @param startX             开始绘制X位置
+     * @param startY             开始绘制Y位置
+     * @param fesTextColor       节日字体颜色
+     * @param selectedDateColor  选中日期字体颜色
+     * @param lunarColor         农历字体颜色
+     * @param cellMinSize        绘制区域的最小值
+     * @param recommendMaxHeight
      */
     protected void innerDrawFestivalOrLunarDate(Canvas canvas, DayCell cell, boolean isToday, boolean isSelected, float startX, float startY,
-                                                int fesTextColor, int selectedDateColor, int lunarColor, float cellMinSize) {
+                                                int fesTextColor, int selectedDateColor, int lunarColor, float cellMinSize, float recommendMaxHeight) {
         String festivalOrDate = null;
         boolean isLunar = false;
         float tempX, tempY;
@@ -1446,9 +1487,9 @@ public abstract class AbsCalendarView extends View {
             }
 
             //优先显示农历节日
-            if (getFestivalStatus(MASK_FESTIVAL_LUNAR_SHOW_FIRST)) {
+            if (lunarFestival != null && getFestivalStatus(MASK_FESTIVAL_LUNAR_SHOW_FIRST)) {
                 //农历优先
-                if (lunarFestival != null && lunarFestival.length() > 0) {
+                if (lunarFestival.length() > 0) {
                     festivalOrDate = lunarFestival;
                 } else if (solarTerm != null && solarTerm.length() > 0) {
                     //节气次之
@@ -1457,9 +1498,9 @@ public abstract class AbsCalendarView extends View {
                     //普通公历节日
                     festivalOrDate = solarFestival;
                 }
-            } else if (getFestivalStatus(MASK_FESTIVAL_SOLAR_SHOW_FIRST)) {
+            } else if (solarFestival != null && getFestivalStatus(MASK_FESTIVAL_SOLAR_SHOW_FIRST)) {
                 //公历优先
-                if (solarFestival != null && solarFestival.length() > 0) {
+                if (solarFestival.length() > 0) {
                     festivalOrDate = solarFestival;
                 } else if (lunarFestival != null && lunarFestival.length() > 0) {
                     //农历
@@ -1468,9 +1509,9 @@ public abstract class AbsCalendarView extends View {
                     //节气
                     festivalOrDate = solarTerm;
                 }
-            } else if (getFestivalStatus(MASK_FESTIVAL_SOLAR_TERM_SHOW_FIRST)) {
+            } else if (solarTerm != null && getFestivalStatus(MASK_FESTIVAL_SOLAR_TERM_SHOW_FIRST)) {
                 //节气优先
-                if (solarTerm != null && solarTerm.length() > 0) {
+                if (solarTerm.length() > 0) {
                     festivalOrDate = solarTerm;
                 } else if (lunarFestival != null && lunarFestival.length() > 0) {
                     //农历
@@ -1482,12 +1523,12 @@ public abstract class AbsCalendarView extends View {
             }
         }
 
-        //若显示农历日期则进行处理
-        if (getCalendarStatus(MASK_CALENDAR_LUNAR_DATE_SHOW)) {
-            //农历日期
-            String lunarDate = cell.getLunarDate();
-            //若不存在任何节日,显示农历日期
-            if (festivalOrDate == null || festivalOrDate.length() <= 0) {
+        //若不存在任何节日判断是否显示农历日期
+        if (festivalOrDate == null || festivalOrDate.length() <= 0) {
+            //若显示农历日期则进行处理
+            if (getCalendarStatus(MASK_CALENDAR_LUNAR_DATE_SHOW)) {
+                //农历日期
+                String lunarDate = cell.getLunarDate();
                 fesTextColor = lunarColor;
                 festivalOrDate = lunarDate;
                 isLunar = true;
@@ -1496,19 +1537,26 @@ public abstract class AbsCalendarView extends View {
 
         if (festivalOrDate != null && festivalOrDate.length() > 0) {
             //文本大小为以一行可放置文本长度为准
-            float fesTextSize = cellMinSize * 2f / (3 * festivalOrDate.length());
-            //字体太大稍微再缩小一些
-            fesTextSize = fesTextSize * 2f / 3;
+            float fesTextSize = cellMinSize / (2f * festivalOrDate.length());
+            //字体大小超过推荐值的最大高度,则缩小字体
+            if (fesTextSize > recommendMaxHeight * 0.8f) {
+                fesTextSize = recommendMaxHeight * 0.8f;
+            }
             mDatePaint.setStyle(Paint.Style.FILL);
             mDatePaint.setTextSize(fesTextSize);
             //若日期被选中,则文本需要使用选中字体颜色
             mDatePaint.setColor(isSelected ? selectedDateColor : fesTextColor);
             mDatePaint.setTextAlign(Paint.Align.CENTER);
 
-            //绘制在下半圆中
+            //必须先计算出文本大小,再计算其绘制位置(绘制的位置由字体大小决定)
+            Paint.FontMetrics fm = mDatePaint.getFontMetrics();
+            //绘制在下半圆中,计算文本绘制坐标
             tempX = startX + mCellWidth / 2;
-            tempY = startY + mCacheHeight / 2 + cellMinSize * 1f / 3;
-            mDrawCallback.drawFestivalOrLunarDate(canvas, isToday, isSelected, isLunar, mDatePaint.getColor(), fesTextSize, tempX, tempY, festivalOrDate, mDatePaint);
+            tempY = startY + fm.bottom - fm.top - fm.bottom;
+            //绘制文本
+            mDrawCallback.drawFestivalOrLunarDate(canvas, isToday, isSelected, isLunar,
+                    mDatePaint.getColor(), fesTextSize, recommendMaxHeight,
+                    tempX, tempY, festivalOrDate, mDatePaint);
         }
     }
 
@@ -1864,6 +1912,34 @@ public abstract class AbsCalendarView extends View {
             invalidate();
         }
         return this;
+    }
+
+    /**
+     * 设置滑动切换界面的距离比(相对于view的宽/高来说)
+     *
+     * @param isHorizontal 是否设置横向滑动距离比,false为设置垂直方向
+     * @param rate
+     * @return
+     */
+    public AbsCalendarView setScrollRate(boolean isHorizontal, float rate) {
+        if (rate >= 0 && rate <= 1) {
+            if (isHorizontal) {
+                mScrollHorRate = rate;
+            } else {
+                mScrollVerticalRate = rate;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 获取滑动切换界面的距离比(相对于View的宽/高来说)
+     *
+     * @param isHorizonal 是否获取横向滑动距离比,false为获取垂直方向
+     * @return
+     */
+    public float getScrollRate(boolean isHorizonal) {
+        return isHorizonal ? mScrollHorRate : mScrollVerticalRate;
     }
 
     /**

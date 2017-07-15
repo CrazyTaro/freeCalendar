@@ -23,7 +23,7 @@ public interface IDrawCallback {
 
     void updateDayCellAfterNewSetting(@NonNull DayCell cell);
 
-    void beforeCellDraw(@NonNull RectF drawArea, @NonNull ColorSetting color, @NonNull DayCell cell, float minSize, Canvas canvas, Paint paint);
+    void beforeCellDraw(@NonNull RectF drawArea, @NonNull ColorSetting color, @NonNull DayCell cell, float minSize, float textSize, Canvas canvas, Paint paint);
 
     void afterCellDraw(Canvas canvas, Paint paint);
 
@@ -43,7 +43,7 @@ public interface IDrawCallback {
 
     void drawBottomDrawable(Canvas canvas, boolean isToday, boolean isSelected, @Nullable Bitmap bmp, @Nullable Drawable drawable, @NonNull RectF recommendRectf, Paint paint);
 
-    void drawFestivalOrLunarDate(Canvas canvas, boolean isToday, boolean isSelected, boolean isLunar, int color, float textSize, float x, float y, @NonNull String festivalOrDate, Paint paint);
+    void drawFestivalOrLunarDate(Canvas canvas, boolean isToday, boolean isSelected, boolean isLunar, int color, float textSize, float recommendMaxHeight, float x, float y, @NonNull String festivalOrDate, Paint paint);
 
     void drawHolidayDate(Canvas canvas, boolean isToday, boolean isSelected, @Nullable Drawable drawable, @NonNull RectF recommendRectf, Paint paint);
 
