@@ -1,7 +1,6 @@
+[TOC]
 # calendar
 a useful calendar which you can custom its styles or actions easily.
-
-[TOC]
 
 # 概述
 日历控件并不是会很常用到,但是在项目中用到的话很多时候是更倾向于UI自定义程度会比较高或者带有自己应用的特点.
@@ -10,41 +9,49 @@ github上已经存在很多很不错的日历控件.但是绝大多数的特点�
 
 # 效果图
 - 默认效果(带农历日期/节日/日期不居中/显示次要月份)
+
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/normal.png)
 
 ---
 
 - 文本居中
+
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/date_in_center.png)
 
 ---
 
 - 无农历日期
+
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/lunar_date_no_show.png)
 
 ---
 
 - 不显示次要月份
+
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/minor_month_no_show.png)
 
 ---
 
 - 简洁文本居中
+
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/simple_date_in_center.png)
 
 ---
 
 - 自定义周末标题
+
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/custom_week_title.png)
 
 ---
 
 - 滑动效果
+
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/calendar.gif)
 
 ---
 
 - 丰富的可设置属性
+
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/calendar_xml_attr.gif)
 
 # 版本更新内容
