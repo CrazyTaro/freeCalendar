@@ -133,7 +133,8 @@ public class ColorSetting {
         mSelectDateTextColor = selected;
     }
 
-    private void init(int normal, int minor, int weekTitle, int weekTitleBackground, int weekend,
+    private void init(int normal, int minor, int weekTitle,
+                      int weekTitleBackground, int weekend,
                       int festival, int lunar, int selected, int today,
                       int todayBackground, int selectedBackground,
                       int background, int dateBackground) {
@@ -153,68 +154,148 @@ public class ColorSetting {
     }
 
     public ColorSetting reset() {
-        init(DEFAULT_TEXT_COLOR_NORMAL, DEFAULT_TEXT_COLOR_MINOR, DEFAULT_TEXT_COLOR_LUNAR, Color.TRANSPARENT, DEFAULT_TEXT_COLOR_WEEKEND,
-                DEFAULT_TEXT_COLOR_FESTIVAL, DEFAULT_TEXT_COLOR_LUNAR, DEFAULT_TEXT_COLOR_SELECTED_DAY, DEFAULT_TEXT_COLOR_NORMAL,
-                Color.TRANSPARENT, DEFAULT_BACKGROUND_SELECTED_DAY,
+        //周末标题/周末背景色/周末文本颜色
+        init(DEFAULT_TEXT_COLOR_NORMAL, DEFAULT_TEXT_COLOR_MINOR, DEFAULT_TEXT_COLOR_LUNAR,
+                //周末背景色/周末文本颜色
+                Color.TRANSPARENT, DEFAULT_TEXT_COLOR_WEEKEND,
+                //节日文本颜色/农历日历文本颜色
+                DEFAULT_TEXT_COLOR_FESTIVAL, DEFAULT_TEXT_COLOR_LUNAR,
+                //选中文本颜色/今日文本颜色
+                DEFAULT_TEXT_COLOR_SELECTED_DAY, DEFAULT_TEXT_COLOR_NORMAL,
+                //今日背景颜色/选中背景颜色
+                DEFAULT_BACKGROUND_SELECTED_DAY, DEFAULT_BACKGROUND_SELECTED_DAY,
+                //控件背景色/日期背景色
                 DEFAULT_BACKGROUND_CALENDAR, Color.TRANSPARENT);
         return this;
     }
 
+    /**
+     * 设置默认的文本颜色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setNormalDateTextColor(@ColorInt int color) {
         mNormalDateTextColor = color;
         return this;
     }
 
+    /**
+     * 设置次要的文本颜色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setMinorDateTextColor(@ColorInt int color) {
         mMinorDateTextColor = color;
         return this;
     }
 
+    /**
+     * 设置周末标题文本颜色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setWeekTitleTextColor(@ColorInt int color) {
         mWeekTitleTextColor = color;
         return this;
     }
 
+    /**
+     * 设置周末文本颜色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setWeekendTextColor(@ColorInt int color) {
         mWeekendTextColor = color;
         return this;
     }
 
+    /**
+     * 设置节日文本颜色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setFestivalTextColor(@ColorInt int color) {
         mFestivalTextColor = color;
         return this;
     }
 
+    /**
+     * 设置农历文本颜色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setLunarTextColor(@ColorInt int color) {
         mLunarTextColor = color;
         return this;
     }
 
+    /**
+     * 设置选中日期文本颜色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setSelectedDateTextColor(@ColorInt int color) {
         mSelectDateTextColor = color;
         return this;
     }
 
+    /**
+     * 设置今日文本颜色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setTodayDateTextColor(@ColorInt int color) {
         mTodayDateTextColor = color;
         return this;
     }
 
+    /**
+     * 设置选中日期背景色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setSelectedDateBackgroundColor(@ColorInt int color) {
         mSelectDateBackgroundColor = color;
         return this;
     }
 
+    /**
+     * 设置今日背景色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setTodayBackgroundColor(@ColorInt int color) {
         mTodayBackgroundColor = color;
         return this;
     }
 
+    /**
+     * 设置控件背景色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setBackgroundColor(@ColorInt int color) {
         mBackgroundColor = color;
         return this;
     }
 
+    /**
+     * 设置日期背景色
+     *
+     * @param color
+     * @return
+     */
     public ColorSetting setDateBackgroundColor(@ColorInt int color) {
         mDateBackgroundColor = color;
         return this;
