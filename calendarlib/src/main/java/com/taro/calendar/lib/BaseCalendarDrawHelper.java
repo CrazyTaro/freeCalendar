@@ -28,7 +28,7 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
     }
 
     @Override
-    public void beforeCellDraw(@NonNull RectF drawArea, @NonNull ColorSetting color, @NonNull DayCell cell, float minSize, float textSize, Canvas canvas, Paint paint) {
+    public void beforeCellDraw(@NonNull AbsCalendarView view, @NonNull RectF drawArea, @NonNull ColorSetting color, @NonNull DayCell cell, float minSize, float textSize, Canvas canvas, Paint paint) {
         //可以在这里缓存可能需要用到的数据,此部分的参数会在整个cell绘制过程不进行任何改变
         //也可以在此处进行一些提前的绘制操作
     }
@@ -54,7 +54,7 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
     }
 
     @Override
-    public void drawSelectedDayBackground(Canvas canvas, @NonNull RectF recommendRectf, @Nullable Drawable drawable, boolean isToday, boolean isHasDrawable, Paint paint) {
+    public void drawSelectedDayBackground(Canvas canvas, @NonNull RectF recommendRectf, @Nullable Drawable drawable, boolean isToday, Paint paint) {
         if (drawable != null) {
             drawable.setBounds((int) recommendRectf.left, (int) recommendRectf.top,
                     (int) recommendRectf.right, (int) recommendRectf.bottom);
@@ -65,7 +65,7 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
     }
 
     @Override
-    public void drawTodayBackground(Canvas canvas, @NonNull RectF recommendRectf, @Nullable Drawable drawable, boolean isHasDrawable, Paint paint) {
+    public void drawTodayBackground(Canvas canvas, @NonNull RectF recommendRectf, @Nullable Drawable drawable, Paint paint) {
         if (drawable != null) {
             drawable.setBounds((int) recommendRectf.left, (int) recommendRectf.top,
                     (int) recommendRectf.right, (int) recommendRectf.bottom);
@@ -81,7 +81,7 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
     }
 
     @Override
-    public boolean isNeedDrawBottomDrawable(@NonNull DayCell cell) {
+    public boolean isNeedDrawBottomDrawable(@NonNull DayCell cell, boolean isToday, boolean isSelected) {
         return cell.isSpecialDate(DayCell.MASK_DATE_BOTTOM_DRAWABLE);
     }
 

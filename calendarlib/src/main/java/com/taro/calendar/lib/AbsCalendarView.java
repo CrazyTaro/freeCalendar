@@ -904,7 +904,7 @@ public abstract class AbsCalendarView extends View {
         //创建缓存月份数据的map
         mCacheDateMap = new SparseArrayCompat<>();
         mCacheMonthCount = 5;
-        for (int i = 0; i < mCacheMonthCount + 2; i++) {
+        for (int i = 0; i < mCacheMonthCount; i++) {
             SparseArrayCompat<DayCell> month = new SparseArrayCompat<>(31);
             for (int d = 1; d <= 31; d++) {
                 month.put(d, mDrawCallback.createDayCell());
@@ -1381,7 +1381,7 @@ public abstract class AbsCalendarView extends View {
             centerX = mDrawRect.centerX();
             centerY = mDrawRect.centerY();
             //绘制之前的基本相关数据及设置,也可以进行预置的一些绘制操作
-            mDrawCallback.beforeCellDraw(mDrawRect, mColor, cell, minSize, dateTextSize, canvas, mDatePaint);
+            mDrawCallback.beforeCellDraw(this, mDrawRect, mColor, cell, minSize, dateTextSize, canvas, mDatePaint);
 
             //若周末文本则使用周末文本颜色
             //此参数在这里设置是因为后面有可能日期是被选中日期,则文本颜色为白色
@@ -1399,7 +1399,7 @@ public abstract class AbsCalendarView extends View {
                 mDatePaint.setStrokeWidth(1.5f);
                 //TODO:是否需要设置今天的背景图?
                 mRecycleRectf.set(centerX - minSize / 2, centerY - minSize / 2, centerX + minSize / 2, centerY + minSize / 2);
-                mDrawCallback.drawTodayBackground(canvas, mRecycleRectf, null, false, mDatePaint);
+                mDrawCallback.drawTodayBackground(canvas, mRecycleRectf, null, mDatePaint);
             }
             //选中当天背景色
             if (monthStatus == MONTH_STATUS_CURRENT && isSelectedDay) {
@@ -1407,7 +1407,7 @@ public abstract class AbsCalendarView extends View {
                 mDatePaint.setColor(mColor.mSelectDateBackgroundColor);
                 mDatePaint.setStyle(Paint.Style.FILL);
                 mRecycleRectf.set(centerX - minSize / 2, centerY - minSize / 2, centerX + minSize / 2, centerY + minSize / 2);
-                mDrawCallback.drawSelectedDayBackground(canvas, mRecycleRectf, mBackgroundDraw, isToday, mBackgroundDraw != null, mDatePaint);
+                mDrawCallback.drawSelectedDayBackground(canvas, mRecycleRectf, mBackgroundDraw, isToday, mDatePaint);
             }
 
             //日期文本
@@ -1432,7 +1432,7 @@ public abstract class AbsCalendarView extends View {
             int drawSize = (int) (minSize + startY - textBottom);
             //底部的小图标与农历日期只能存在一个,没有足够的空间可以同时存在
             //绘制底部的图片
-            if (mDrawCallback.isNeedDrawBottomDrawable(cell)) {
+            if (mDrawCallback.isNeedDrawBottomDrawable(cell, isToday, isSelectedDay)) {
                 //绘制图标的X位置,left
                 tempX = startX + mCellWidth / 2 - drawSize / 2;
                 //绘制图标的Y位置,top
@@ -1456,7 +1456,7 @@ public abstract class AbsCalendarView extends View {
                 mDrawCallback.drawHolidayDate(canvas, isToday, isSelectedDay, mDrawFestival, mRecycleRectf, mDatePaint);
             }
             //是否为加班
-            if (cell.isSpecialDate(DayCell.MASK_DATE_WORK) && mDrawWork != null) {
+            if (cell.isSpecialDate(DayCell.MASK_DATE_WORK)) {
                 mRecycleRectf.set(tempX, tempY, tempX + drawSize, tempY + drawSize);
                 mDrawCallback.drawWorkDate(canvas, isToday, isSelectedDay, mDrawWork, mRecycleRectf, mDatePaint);
             }
@@ -1947,8 +1947,9 @@ public abstract class AbsCalendarView extends View {
         if (weekTitle != null && weekTitle.length == 7) {
             SparseArrayCompat<String> titleContainer;
             titleContainer = WEEK_DESC_MAP.get(isChinese ? WEEK_TITLE_CHINESE : WEEK_TITLE_ENGLISH);
-            for (int i = 0; i < weekTitle.length; i++) {
-                titleContainer.put(i + 1, weekTitle[i]);
+            for (int i = Calendar.SUNDAY - 1; i < weekTitle.length; i++) {
+                String title = weekTitle[i] == null ? "" : weekTitle[i];
+                titleContainer.put(i, title);
             }
         }
         return this;
@@ -1963,9 +1964,10 @@ public abstract class AbsCalendarView extends View {
      * @return
      */
     public AbsCalendarView setWeekTitle(boolean isChinese, int whichDay, String title) {
+        title = title == null ? "" : title;
         if (whichDay >= Calendar.SUNDAY && whichDay <= Calendar.SATURDAY) {
             SparseArrayCompat<String> titleContainer = WEEK_DESC_MAP.get(isChinese ? WEEK_TITLE_CHINESE : WEEK_TITLE_ENGLISH);
-            titleContainer.put(whichDay, title);
+            titleContainer.put(whichDay - 1, title);
         }
         return this;
     }
