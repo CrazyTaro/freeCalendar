@@ -192,6 +192,8 @@ public abstract class AbsCalendarView extends View {
     protected SparseArrayCompat<SparseArrayCompat<DayCell>> mCacheDateMap;
     //记录当前已缓存的月份对象
     private Stack<SparseArrayCompat<DayCell>> mRecycleMonthStack;
+    //默认的中英两个周末信息
+    private final SparseArrayCompat<SparseArrayCompat<String>> WEEK_DESC_MAP = new SparseArrayCompat<>(3);
 
     private float mDownX, mDownY;
     //界面滑动方向
@@ -226,8 +228,11 @@ public abstract class AbsCalendarView extends View {
     protected static final int SCROLL_AXIS_HORIZONTAL = 1;
     //垂直滑动状态
     protected static final int SCROLL_AXIS_VERTICAL = 2;
-    //默认的中英两个周末信息
-    protected static final SparseArrayCompat<SparseArrayCompat<String>> WEEK_DESC_MAP = new SparseArrayCompat<>(3);
+
+    //周末标题,中文
+    protected static final int WEEK_TITLE_CHINESE = 1;
+    //周末标题,英文
+    protected static final int WEEK_TITLE_ENGLISH = 0;
 
     public AbsCalendarView(Context context) {
         super(context);
@@ -852,18 +857,13 @@ public abstract class AbsCalendarView extends View {
         mColor = new ColorSetting();
         mDrawCallback = createCallback();
 
-        //初始化星期缓存数据
-        String[] chiness = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
-        String[] english = {"SUN", "MON", "TUES", "WED", "THU", "FRI", "SAT"};
         SparseArrayCompat<String> chineseWeek = new SparseArrayCompat<>(7);
         SparseArrayCompat<String> englishWeek = new SparseArrayCompat<>(7);
-        //sunday的值为1,saturday为7
-        for (int i = Calendar.SUNDAY - 1; i < Calendar.SATURDAY; i++) {
-            chineseWeek.put(i, chiness[i]);
-            englishWeek.put(i, english[i]);
-        }
-        WEEK_DESC_MAP.put(0, englishWeek);
-        WEEK_DESC_MAP.put(1, chineseWeek);
+        WEEK_DESC_MAP.put(WEEK_TITLE_ENGLISH, englishWeek);
+        WEEK_DESC_MAP.put(WEEK_TITLE_CHINESE, chineseWeek);
+        //初始化星期缓存数据
+        resetWeekTitle(true);
+        resetWeekTitle(false);
 
         //每周开始星期
         mWeekStartDay = Calendar.SUNDAY;
@@ -921,10 +921,10 @@ public abstract class AbsCalendarView extends View {
     protected void updateTipDrawableText() {
         boolean isEnglish = !getCalendarStatus(MASK_CALENDAR_WEEK_TITLE_CHINESE);
         if (mDrawFestival != null) {
-            mDrawFestival.updateTextWhenLanguageChanged(isEnglish, "Fest");
+            mDrawFestival.updateTextWhenLanguageChanged(isEnglish, isEnglish ? "F" : "假");
         }
         if (mDrawWork != null) {
-            mDrawWork.updateTextWhenLanguageChanged(isEnglish, "Work");
+            mDrawWork.updateTextWhenLanguageChanged(isEnglish, isEnglish ? "W" : "班");
         }
     }
 
@@ -1140,7 +1140,7 @@ public abstract class AbsCalendarView extends View {
         if (getCalendarStatus(MASK_CALENDAR_WEEK_TITLE_SHOW)) {
             //获取星期标题文本的内容
             boolean isChinese = getCalendarStatus(MASK_CALENDAR_WEEK_TITLE_CHINESE);
-            SparseArrayCompat<String> item = WEEK_DESC_MAP.get(isChinese ? 1 : 0);
+            SparseArrayCompat<String> item = WEEK_DESC_MAP.get(isChinese ? WEEK_TITLE_CHINESE : WEEK_TITLE_ENGLISH);
             //绘制星期标题
             innerDrawWeekTitle(canvas, startX, startY, item);
             //绘制后添加标题高度
@@ -1932,6 +1932,65 @@ public abstract class AbsCalendarView extends View {
         if (color != null) {
             mColor = color;
             invalidate();
+        }
+        return this;
+    }
+
+    /**
+     * 设置周末文本标题
+     *
+     * @param isChinese 是否为中文标题,false为英文标题
+     * @param weekTitle 文本标题数组,此参数必须不为空且长度为7时有效.顺序必须从周日开始
+     * @return
+     */
+    public AbsCalendarView setWeekTitle(boolean isChinese, String[] weekTitle) {
+        if (weekTitle != null && weekTitle.length == 7) {
+            SparseArrayCompat<String> titleContainer;
+            titleContainer = WEEK_DESC_MAP.get(isChinese ? WEEK_TITLE_CHINESE : WEEK_TITLE_ENGLISH);
+            for (int i = 0; i < weekTitle.length; i++) {
+                titleContainer.put(i + 1, weekTitle[i]);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 设置某个星期当天的文本
+     *
+     * @param isChinese 是否中文标题,false为英文标题
+     * @param whichDay  哪个星期,使用{@link Calendar#SUNDAY} - {@link Calendar#SATURDAY},或者数字1-7有效
+     * @param title     当天的星期标题文本
+     * @return
+     */
+    public AbsCalendarView setWeekTitle(boolean isChinese, int whichDay, String title) {
+        if (whichDay >= Calendar.SUNDAY && whichDay <= Calendar.SATURDAY) {
+            SparseArrayCompat<String> titleContainer = WEEK_DESC_MAP.get(isChinese ? WEEK_TITLE_CHINESE : WEEK_TITLE_ENGLISH);
+            titleContainer.put(whichDay, title);
+        }
+        return this;
+    }
+
+    /**
+     * 重置周末标题文本
+     *
+     * @param resetChinese 是否重置中文标题,false为英文标题
+     * @return
+     */
+    public AbsCalendarView resetWeekTitle(boolean resetChinese) {
+        //初始化星期缓存数据
+        String[] title = null;
+        SparseArrayCompat<String> titleContainer = null;
+
+        if (resetChinese) {
+            title = new String[]{"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
+            titleContainer = WEEK_DESC_MAP.get(WEEK_TITLE_CHINESE);
+        } else {
+            title = new String[]{"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+            titleContainer = WEEK_DESC_MAP.get(WEEK_TITLE_ENGLISH);
+        }
+        //sunday的值为1,saturday为7
+        for (int i = Calendar.SUNDAY - 1; i < Calendar.SATURDAY; i++) {
+            titleContainer.put(i, title[i]);
         }
         return this;
     }
