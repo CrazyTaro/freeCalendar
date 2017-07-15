@@ -55,7 +55,7 @@ public class CircleUsefulDrawable extends Drawable {
 
     public CircleUsefulDrawable() {
         this(ColorSetting.DEFAULT_COLOR_BLUE, ColorSetting.DEFAULT_COLOR_BLUE,
-                2, 0, 360, -90, 135, -1, -1);
+                2, -90, 135, 0, 360, -1, -1);
     }
 
     public CircleUsefulDrawable(@ColorInt int storkeColor, @ColorInt int fillColor, float strokeWidth,
@@ -102,7 +102,7 @@ public class CircleUsefulDrawable extends Drawable {
     }
 
     public CircleUsefulDrawable setFillSweepAngle(@IntRange(from = 0, to = 360) int angle) {
-        mFillStartAngle = angle;
+        mFillSweepAngle = angle;
         return this;
     }
 
@@ -173,12 +173,12 @@ public class CircleUsefulDrawable extends Drawable {
 
             mPaint.setColor(mFillColor);
             mPaint.setStyle(Paint.Style.FILL);
-            canvas.drawArc(mDrawRect, mStrokeStartAngle, mStrokeSweepAngle, true, mPaint);
+            canvas.drawArc(mDrawRect, mFillStartAngle, mFillSweepAngle, true, mPaint);
 
             mPaint.setColor(mStrokeColor);
             mPaint.setStrokeWidth(mStrokeWidth);
             mPaint.setStyle(Paint.Style.STROKE);
-            canvas.drawArc(mDrawRect, mFillStartAngle, mFillSweepAngle, false, mPaint);
+            canvas.drawArc(mDrawRect, mStrokeStartAngle, mStrokeSweepAngle, false, mPaint);
 
             if (mDividerDirection != DIRECTION_NONE) {
                 if (mPath == null) {
