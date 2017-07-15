@@ -29,7 +29,7 @@ public class CalendarView extends AbsCalendarView {
     @NonNull
     @Override
     protected IDrawCallback createCallback() {
-        return new CalendarDrawHelper();
+        return new BaseCalendarDrawHelper();
     }
 
     @Override

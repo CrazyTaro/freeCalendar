@@ -14,7 +14,7 @@ import com.taro.calendar.lib.callback.IDrawCallback;
  * Created by taro on 2017/6/23.
  */
 
-public class CalendarDrawHelper implements IDrawCallback {
+public class BaseCalendarDrawHelper implements IDrawCallback {
 
     @NonNull
     @Override
@@ -28,7 +28,7 @@ public class CalendarDrawHelper implements IDrawCallback {
     }
 
     @Override
-    public void beforeCellDraw(@NonNull RectF drawArea, @NonNull ColorSetting color, @NonNull DayCell cell, float minSize, Canvas canvas, Paint paint) {
+    public void beforeCellDraw(@NonNull RectF drawArea, @NonNull ColorSetting color, @NonNull DayCell cell, float minSize, float textSize, Canvas canvas, Paint paint) {
         //可以在这里缓存可能需要用到的数据,此部分的参数会在整个cell绘制过程不进行任何改变
         //也可以在此处进行一些提前的绘制操作
     }
@@ -97,7 +97,7 @@ public class CalendarDrawHelper implements IDrawCallback {
     }
 
     @Override
-    public void drawFestivalOrLunarDate(Canvas canvas, boolean isToday, boolean isSelected, boolean isLunar, int color, float textSize, float x, float y, @NonNull String festivalOrDate, Paint paint) {
+    public void drawFestivalOrLunarDate(Canvas canvas, boolean isToday, boolean isSelected, boolean isLunar, int color, float textSize, float recommendMaxHeight, float x, float y, @NonNull String festivalOrDate, Paint paint) {
         canvas.drawText(festivalOrDate, x, y, paint);
     }
 
