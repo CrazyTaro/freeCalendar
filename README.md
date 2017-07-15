@@ -236,4 +236,4 @@ UI的绘制是通过`IDrawCallback`接口进行回调的.即使是默认可直�
 |drawHolidayDate|-|绘制假期图标,此绘制是在日期上叠加,会挡住部分日期并且默认显示在左上角|
 |drawWorkDate|-|绘制加班图标,此绘制是在日期上叠加,会挡住部分日期并默认显示在左上角|
 
-[接口及参数详情说明](../interface_introduction.md)
+[接口及参数详情说明](https://github.com/CrazyTaro/freeCalendar/blob/master/interface_introduction.md)
