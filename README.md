@@ -104,7 +104,50 @@ dependencies {
 
 直接实现`IDrawCallback`也是一样的,但一次需要实现的接口有点多,推荐还是继承`BaseCalendarDrawHelper`进行并重写相关方法即可;
 
-**重要提示:`BaseCalendarDrawHelper`中基本每个方法都实现了相关的绘制逻辑,不需要默认的UI绘制方式则重写时注意不要调用`super`方法**
+```
+public class BaseCalendarDrawHelper implements IDrawCallback {
+    //实现对应的方法...
+}
+```
+
+在回调的方法中,实际上需要使用的样式已经设置在`paint`中,如果不需要改动样式直接就可以绘制自己需要的UI
+
+```
+public class BaseCalendarDrawHelper implements IDrawCallback {
+    @Override
+    public void drawWeekTitleBackground(Canvas canvas, @NonNull RectF drawArea, Paint paint) {
+        canvas.drawRect(drawArea, paint);
+    }
+
+    @Override
+    public void drawSelectedDayBackground(Canvas canvas, @NonNull RectF recommendRectf, @Nullable Drawable drawable, boolean isToday, Paint paint) {
+        if (drawable != null) {
+            //存在drawable使用背景drawable绘制
+            drawable.setBounds((int) recommendRectf.left, (int) recommendRectf.top,
+                    (int) recommendRectf.right, (int) recommendRectf.bottom);
+            drawable.draw(canvas);
+        } else {
+            //否则绘制圆形背景
+            canvas.drawArc(recommendRectf, 0, 360, false, paint);
+        }
+    }
+
+    @Override
+    public void drawDateText(Canvas canvas, boolean isToday, boolean isSelected, int color, float textSize, float x, float y, @NonNull String date, Paint paint) {
+        canvas.drawText(date, x, y, paint);
+    }
+
+    //其它绘制方法...
+}
+```
+
+以上给出了几个默认绘制方法的实现,可见看到实际上只需要调用`canvas`默认对应的方法就可以进行绘制了(图形或者是文字等);
+
+当需要自己调整绘制的UI时,则可以使用方法提供的参数自行调整.如上默认提供的推荐区域为正方形,但是可以将UI绘制为圆形.具体视需求而定.
+
+**重要提示:`BaseCalendarDrawHelper`中基本每个方法都实现了相关的绘制逻辑,不需要默认的UI绘制方式则重写时注意不要调用`super`方法**,以上示例为`BaseCalendarDrawHelper`的实现,具体每个方法的默认实现请查看该类的源码.
+
+更多接口方法及说明请查看以下内容
 
 # 接口及属性参考
 ## xml属性及意义
@@ -219,7 +262,7 @@ UI的绘制是通过`IDrawCallback`接口进行回调的.即使是默认可直�
 
 **绘制接口有点多,做好心理准备哦**
 
-- 接口方法及参数说明
+### 接口方法及参数说明
 
 |方法名称|返回值|说明|
 |--|--|--|
@@ -238,5 +281,36 @@ UI的绘制是通过`IDrawCallback`接口进行回调的.即使是默认可直�
 |drawFestivalOrLunarDate|-|绘制节日或者农历日期文本|
 |drawHolidayDate|-|绘制假期图标,此绘制是在日期上叠加,会挡住部分日期并且默认显示在左上角|
 |drawWorkDate|-|绘制加班图标,此绘制是在日期上叠加,会挡住部分日期并默认显示在左上角|
+
+### 部分重点方法说明
+
+有部分方法在`BaseCalendarDrawHelper`中并没有实现具体代码,但是实际上是有很重要的预备作用的.下面重点说一下这几个方法.具体可直接查看源码.
+
+- `createDayCell`-创建日期对象方法
+
+创建日期对象,日期对象必定是`DayCell`类型,但是这里是允许自定义创建对象的.所以当实际需要处理的日期对象数据包含了其它自定义的数据类型时,可以继承自`DayCell`进行返回;**日期对象数据是会缓存起来复用的,请尽量不要在子类中引用Activity等临时性比较强的对象,防止内在泄漏**
+
+---
+
+- `updateDayCellAfterNewSetting`-更新了dayCell数据后的回调
+
+由于`DayCell`会被复用,所以当切换月份或者其它任何被复用的情况下,dayCell都会被重新赋值,赋值后此方法会回调;可在此方法中进行一些判断或者逻辑处理,或者给自定义的dayCell添加一些相关的属性或者设置
+
+---
+
+- `beforeCellDraw`-绘制某个日期之前的回调
+
+此回调首先提供了大量绘制该cell时使用的参数(在绘制过程都是不变的,除非手动去修改设置);如绘制的区域,颜色配置,日期字体大小;之后在其它绘制回调中不再提供这些不变的配置参数,所以如果需要时可以在此处缓存下来.**此处所有参数仅在此次日期绘制时不变,绘制新的日期时参数可能会变动**;
+
+其中参数`drawArea`需要特别说明一下,这里是指该日期所占的绘制区域,**是个矩形,是个矩形,是个矩形!**,并且每个日期的绘制区域是相连在一起的(本质日历就是一个表格类型),当需要把绘制UI成特别形状时必须在此绘制区域内并且需要自行调整.
+
+最后,在此方法中可以进行一些最初的绘制操作.但该部分的所有绘制结果都会被后续绘制重叠的内容覆盖.(即绘制在最底层)
+
+---
+
+- `afterCellDraw`-绘制某个日期之后的回调
+
+此回调与`beforeCellDraw`非常相似,但是仅有一个目的,做绘制后工作的处理或者是自行调整UI绘制,此部分的绘制操作会覆盖原有的所有绘制内容.
+
 
 [接口及参数详情说明](https://github.com/CrazyTaro/freeCalendar/blob/master/interface_introduction.md)
