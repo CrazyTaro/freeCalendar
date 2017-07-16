@@ -904,7 +904,10 @@ public abstract class AbsCalendarView extends View {
         //创建缓存月份数据的map
         mCacheDateMap = new SparseArrayCompat<>();
         mCacheMonthCount = 5;
-        for (int i = 0; i < mCacheMonthCount; i++) {
+        //加2是为了回收使用的处理对象可正常使用
+        //当需要一次缓存时,同时需要缓存该月次要月份,则同时需要提供两个缓存的月份数据
+        //所以mCacheMonthCount是正在使用的缓存数量,+2是缓存栈中的备用数据
+        for (int i = 0; i < mCacheMonthCount + 2; i++) {
             SparseArrayCompat<DayCell> month = new SparseArrayCompat<>(31);
             for (int d = 1; d <= 31; d++) {
                 month.put(d, mDrawCallback.createDayCell());
@@ -1341,7 +1344,7 @@ public abstract class AbsCalendarView extends View {
         } else {
             int nowYear, nowMonth, nowDay;
             float tempX, tempY, centerX, centerY;
-            float dateTextSize, textBottom;
+            float dateTextSize, textBottom, textTop;
             //计算出绘制区域的最小边(绘制工作只会在居中的正方形区域中进行)
             float minSize = Math.min(mCellWidth, mCacheHeight);
             //默认处理颜色值
@@ -1426,10 +1429,11 @@ public abstract class AbsCalendarView extends View {
                 tempY = startY + mCacheHeight / 2;
             }
             textBottom = tempY + fm.bottom;
+            textTop = tempY + fm.ascent;
             mDrawCallback.drawDateText(canvas, isToday, isSelectedDay, dateTextColor, dateTextSize, tempX, tempY, day, mDatePaint);
 
             //计算drawable图标的大小
-            int drawSize = (int) (minSize + startY - textBottom);
+            int drawSize = (int) (minSize / 2 + centerY - textBottom);
             //底部的小图标与农历日期只能存在一个,没有足够的空间可以同时存在
             //绘制底部的图片
             if (mDrawCallback.isNeedDrawBottomDrawable(cell, isToday, isSelectedDay)) {
@@ -1450,6 +1454,7 @@ public abstract class AbsCalendarView extends View {
 
             tempX = startX + mCellWidth / 2 - minSize / 2;
             tempY = startY + mCacheHeight / 2 - minSize / 2;
+            drawSize = (int) (textTop - (centerY - minSize / 2));
             //是否为假期
             if (cell.isSpecialDate(DayCell.MASK_DATE_HOLIDAY)) {
                 mRecycleRectf.set(tempX, tempY, tempX + drawSize, tempY + drawSize);

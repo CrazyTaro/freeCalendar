@@ -182,8 +182,8 @@ public class TipDrawable extends Drawable {
                 mPaint.setTextSize(mTextSize);
                 Paint.FontMetrics fm = mPaint.getFontMetrics();
                 float length = mPaint.measureText(mText);
-                float x = (bound.width() - length) / 2;
-                float y = (bound.height() / 2) + (fm.bottom - fm.top) / 2 - fm.bottom;
+                float x = mDrawRectf.left + (bound.width() - length) / 2;
+                float y = mDrawRectf.top + (bound.height() / 2) + (fm.bottom - fm.top) / 2 - fm.bottom;
                 drawText(canvas, mDrawRectf, mText, x, y, mPaint);
             }
         }
