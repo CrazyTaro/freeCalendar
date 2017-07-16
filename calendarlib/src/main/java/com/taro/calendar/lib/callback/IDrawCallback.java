@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import com.taro.calendar.lib.AbsCalendarView;
 import com.taro.calendar.lib.ColorSetting;
 import com.taro.calendar.lib.DayCell;
+import com.taro.calendar.lib.utils.Lunar;
 
 /**
  * 日历绘制相关的接口回调<br>
@@ -33,9 +34,10 @@ public interface IDrawCallback {
     /**
      * 在设置日期对象数据后回调,需要对日期对象相关数据处理时可在此接口进行处理
      *
-     * @param cell
+     * @param cell      日期对象
+     * @param lunarDate 农历日期处理对象
      */
-    void updateDayCellAfterNewSetting(@NonNull DayCell cell);
+    void updateDayCellAfterNewSetting(@NonNull DayCell cell, @NonNull Lunar lunarDate);
 
     /**
      * 某个具体日期绘制前的回调,提供该日期绘制期间不变的参数及信息;<br>

@@ -1323,7 +1323,7 @@ public abstract class AbsCalendarView extends View {
         //根据节假日或者加班日设置数据
         cell.setSpecialDate(DayCell.MASK_DATE_HOLIDAY, isHoliday);
 
-        mDrawCallback.updateDayCellAfterNewSetting(cell);
+        mDrawCallback.updateDayCellAfterNewSetting(cell, mRecycleLunar);
     }
 
     /**
