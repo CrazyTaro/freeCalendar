@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.taro.calendar.lib.callback.IDrawCallback;
+import com.taro.calendar.lib.utils.Lunar;
 
 /**
  * Created by taro on 2017/6/23.
@@ -23,8 +24,10 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
     }
 
     @Override
-    public void updateDayCellAfterNewSetting(@NonNull DayCell cell) {
-
+    public void updateDayCellAfterNewSetting(@NonNull DayCell cell, @NonNull Lunar lunarDate) {
+        if (lunarDate.isHoliday()) {
+            cell.setSpecialDate(DayCell.MASK_DATE_HOLIDAY, true);
+        }
     }
 
     @Override
