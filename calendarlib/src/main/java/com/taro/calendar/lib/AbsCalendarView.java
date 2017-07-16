@@ -779,11 +779,6 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_selectedDay, -1);
-            if (value != -1) {
-                setSelectedDay(value);
-            }
-
             drawable = ta.getDrawable(R.styleable.AbsCalendarView_bottomDrawable);
             if (drawable != null) {
                 mBottomDraw = drawable;
@@ -806,10 +801,15 @@ public abstract class AbsCalendarView extends View {
 
             value = ta.getInt(R.styleable.AbsCalendarView_initMonth, -1);
             if (value != -1) {
-                setSelectedMonth(value);
+                setSelectedMonth(value - 1);
             }
 
             value = ta.getInt(R.styleable.AbsCalendarView_initDay, -1);
+            if (value != -1) {
+                setSelectedDay(value);
+            }
+
+            value = ta.getInt(R.styleable.AbsCalendarView_selectedDay, -1);
             if (value != -1) {
                 setSelectedDay(value);
             }
