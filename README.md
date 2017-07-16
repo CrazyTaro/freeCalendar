@@ -27,7 +27,7 @@ github上已经存在很多很不错的日历控件.但是绝大多数的特点�
 - [] 提供一些日期相关的工具方法或接口
 
 # 使用方式
-- step1:在项目级别的`build.gradle`文件下声明仓库
+## step1:在项目级别的`build.gradle`文件下声明仓库
 
 ```
 allprojects {
@@ -38,7 +38,7 @@ allprojects {
 }
 ```
 
-- step2:引用需要的版本
+## step2:引用需要的版本
 
 最新版本: [![](https://www.jitpack.io/v/CrazyTaro/freeCalendar.svg)](https://www.jitpack.io/#CrazyTaro/freeCalendar)
 ```
@@ -47,7 +47,7 @@ dependencies {
 }
 ```
 
-- step3:在xml中使用
+## step3:在xml中使用
 
 ```
 <com.taro.calendar.lib.CalendarView
@@ -56,9 +56,58 @@ dependencies {
         android:layout_height="match_parent"/>
 ```
 
-- step4:自定义UI控制
+## step4:自定义UI控制
 
+### 颜色样式配置
+大部分的颜色可以在xml中直接设置,也可以在代码中进行设置;所有的颜色配置都在`ColorSetting`的类中.
+
+```
+view.getColorSetting()
+        .setBackgroundColor(ColorSetting.DEFAULT_COLOR_BLUE)
+        .setDateBackgroundColor(Color.parseColor("#ff9900"));
+```
+
+也可以`new ColorSetting()`并配置后再设置给`calendarView`
+
+---
+
+### 假期/加班图标设置
+由于默认UI是不处理并显示任何图标的,假期及加班图标的设置需要重写部分绘制UI.
+
+```
+@Override
+public void updateDayCellAfterNewSetting(@NonNull DayCell cell, @NonNull Lunar lunarDate) {
+    //农历日期类计算当前日期是需要休假的
+    //现在正在调整节日的计算及处理,后面可能就不再是进行类似的判断
+    //之后根据调整后的节日计算再判断当前日期是否需要休假,这部分将会考虑被独立出来处理
+    if (lunarDate.isHoliday()) {
+        //必须对日期对象中相关的特殊日期标识进行设置才有效
+        //需要显示底部图标时也需要设置相关的标识
+        //MASK_DATE_HOLIDAY,假期标识
+        //MASK_DATE_WORK,加班标识
+        //MASK_DATE_BOTTOM_DRAWABLE,显示底部图标标识
+        cell.setSpecialDate(DayCell.MASK_DATE_HOLIDAY, true);
+    }
+}
+```
+
+设置了显示假期图标或者加班图标后,还可以设置假期或加班图标的标识;该图标的类型是`TipDrawable`,通过调用对应的方法即可设置相关样式.包括背景色/文本等;获取默认的假期/加班图标可调用`calendarView`的方法`getWorkTipDrawable`/`getFestivalDrawable`;
+
+```
+view.getFestivalDrawable()
+        //设置图标文本
+        .setText("啊")
+        //设置文本颜色
+        .setTextColor(Color.WHITE)
+        //设置图标背景色
+        .setBackgroundColor(Color.BLACK);
+```
+
+---
+
+### 完全自定义UI
 继承`BaseCalendarDrawHelper`,对需要修改或者控制的UI进行重写即可.
+
 其中`BaseCalendarDrawHelper`是一个默认实现了所有绘制接口的类,默认的控件`CalendarView`的绘制操作即使用此类的实例.该类是实现了`IDrawCallback`的绘制接口.
 
 直接实现`IDrawCallback`也是一样的,但一次需要实现的接口有点多,推荐还是继承`BaseCalendarDrawHelper`进行并重写相关方法即可;
@@ -144,6 +193,10 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/custom_week_title.png)
 
 ---
+
+- 显示假期/加班图标
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/festival_icon.png)
 
 - 滑动效果
 
@@ -320,3 +373,7 @@ UI的绘制是通过`IDrawCallback`接口进行回调的.即使是默认可直�
 
 
 [接口及参数详情说明](https://github.com/CrazyTaro/freeCalendar/blob/master/interface_introduction.md)
+
+# 其它
+
+农历日期计算的源码来自网络,如果有任何不当的地方,侵删.
