@@ -5,8 +5,17 @@ package com.taro.calendar.lib;
  */
 
 public class DayCell {
+    /**
+     * 假期标识
+     */
     public static final int MASK_DATE_HOLIDAY = 0b0001;
+    /**
+     * 加班标识
+     */
     public static final int MASK_DATE_WORK = 0b0010;
+    /**
+     * 显示底层图标标识
+     */
     public static final int MASK_DATE_BOTTOM_DRAWABLE = 0b0100;
 
     //年
