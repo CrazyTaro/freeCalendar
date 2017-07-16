@@ -25,9 +25,6 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 
     @Override
     public void updateDayCellAfterNewSetting(@NonNull DayCell cell, @NonNull Lunar lunarDate) {
-        if (lunarDate.isHoliday()) {
-            cell.setSpecialDate(DayCell.MASK_DATE_HOLIDAY, true);
-        }
     }
 
     @Override
