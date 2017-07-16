@@ -51,6 +51,7 @@ allprojects {
 最新版本: [![](https://jitpack.io/v/CrazyTaro/freeCalendar.svg)](https://jitpack.io/#CrazyTaro/freeCalendar)
 ```
 dependencies {
+        //latest_release记得替换成最新版本号
         compile 'com.github.CrazyTaro:freeCalendar:latest_release'
 }
 ```
