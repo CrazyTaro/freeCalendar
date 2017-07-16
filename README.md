@@ -9,53 +9,6 @@ github上已经存在很多很不错的日历控件.但是绝大多数的特点�
 
 基于这个原因,所以就写了这个日历控件库希望**本身功能比较完整的情况下同时也能提供比较方便容易的自定义UI**的功能
 
-# 效果图
-- 默认效果(带农历日期/节日/日期不居中/显示次要月份)
-
-![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/normal.png)
-
----
-
-- 文本居中(仔细看主要的元素都集中在下半部分,可能会感觉有点挤)
-
-![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/date_in_center.png)
-
----
-
-- 无农历日期
-
-![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/lunar_date_no_show.png)
-
----
-
-- 不显示次要月份
-
-![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/minor_month_no_show.png)
-
----
-
-- 简洁文本居中(日期显示居中,会显得清楚端正)
-
-![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/simple_date_in_center.png)
-
----
-
-- 自定义周末标题
-
-![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/custom_week_title.png)
-
----
-
-- 滑动效果
-
-![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/calendar.gif)
-
----
-
-- 丰富的可设置属性
-
-![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/calendar_xml_attr.gif)
-
 # 版本更新内容
 - 0.1.0,首次发布
 - 0.2.0,新增周末标题文本可自定义的功能
@@ -66,6 +19,12 @@ github上已经存在很多很不错的日历控件.但是绝大多数的特点�
 - 丰富的xml属性设置可以满足大部分的需要并且能直接在xml中预览出效果
 - 大量的自定义绘制方法可直接控制日历的UI显示
 - 自定义UI绘制采用接口回调的方式不需要继承任何View直接重写相关的方法即可
+
+# TODO
+- [] 优化绘制的方式和逻辑(长期工作)
+- [] 调整"假期/加班"图标绘制方式
+- [] 分离并独立农历/公历节日计算
+- [] 提供一些日期相关的工具方法或接口
 
 # 使用方式
 - step1:在项目级别的`build.gradle`文件下声明仓库
@@ -148,6 +107,53 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 **重要提示:`BaseCalendarDrawHelper`中基本每个方法都实现了相关的绘制逻辑,不需要默认的UI绘制方式则重写时注意不要调用`super`方法**,以上示例为`BaseCalendarDrawHelper`的实现,具体每个方法的默认实现请查看该类的源码.
 
 更多接口方法及说明请查看以下内容
+
+# 效果图
+- 默认效果(带农历日期/节日/日期不居中/显示次要月份)
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/normal.png)
+
+---
+
+- 文本居中(仔细看主要的元素都集中在下半部分,可能会感觉有点挤)
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/date_in_center.png)
+
+---
+
+- 无农历日期
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/lunar_date_no_show.png)
+
+---
+
+- 不显示次要月份
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/minor_month_no_show.png)
+
+---
+
+- 简洁文本居中(日期显示居中,会显得清楚端正)
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/simple_date_in_center.png)
+
+---
+
+- 自定义周末标题
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/custom_week_title.png)
+
+---
+
+- 滑动效果
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/calendar.gif)
+
+---
+
+- 丰富的可设置属性
+
+![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/calendar_xml_attr.gif)
 
 # 接口及属性参考
 ## xml属性及意义
