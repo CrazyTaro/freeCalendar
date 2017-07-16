@@ -57,7 +57,7 @@ public class TipDrawable extends Drawable {
     }
 
     /**
-     * 设置绘制的XY
+     * 偏移X/Y轴方向对应的距离(x,y)
      *
      * @param x
      * @param y
@@ -93,7 +93,19 @@ public class TipDrawable extends Drawable {
     }
 
     /**
-     * 是否改变文本当语言改变时
+     * 设置图标的背景色
+     *
+     * @param color
+     * @return
+     */
+    public TipDrawable setBackgroundColor(@ColorInt int color) {
+        mBgColor = color;
+        return this;
+    }
+
+    /**
+     * 是否改变文本当语言改变时,默认会直接使用该文本当新文本<br>
+     * 此方法主要是提供给需要重写此图标功能时可重写此方法
      *
      * @param isEnglish
      * @return
@@ -113,7 +125,8 @@ public class TipDrawable extends Drawable {
     }
 
     /**
-     * 绘制图标背景
+     * 绘制图标背景<br>
+     * 此方法提供给需要重写此图标功能时可重写此方法,可自定义需要绘制的图标背景,默认为椭圆形(当绘制区域为正方形时则为圆形)
      *
      * @param canvas
      * @param drawArea 图标绘制区域
