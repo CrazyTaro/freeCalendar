@@ -338,8 +338,13 @@ public abstract class AbsCalendarView extends View {
                         //单击,计算按下位置的日期,更新当前选中日期
                         int day = computeCellDay(mDownX, mDownY);
                         if (day != -1) {
+                            int oldDay = mSelectedDay;
                             //切换选中日期
                             mSelectedDay = day;
+                            if (mActionCallback != null) {
+                                mActionCallback.onSelectedDayChanged(mSelectedYear, mSelectedMonth, oldDay,
+                                        mSelectedYear, mSelectedMonth, mSelectedDay);
+                            }
                         }
                     } else {
                         //TODO:长按
