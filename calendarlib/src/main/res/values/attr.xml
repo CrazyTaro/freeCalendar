@@ -1,174 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--节日相关的设置,可多个设置同时使用-->
-    <attr name="festivalFlag">
-        <flag name="showSolarTermFirst" value="64"/>
-        <flag name="showSolarFirst" value="32"/>
-        <flag name="showLunarFirst" value="16"/>
-        <flag name="solarTermShow" value="8"/>
-        <flag name="lunarShow" value="4"/>
-        <flag name="solarShow" value="2"/>
-        <flag name="festivalShow" value="1"/>
+    <attr name="ctCldFestivalFlag">
+        <flag name="showSolarTermFirst" value="64" />
+        <flag name="showSolarFirst" value="32" />
+        <flag name="showLunarFirst" value="16" />
+        <flag name="solarTermShow" value="8" />
+        <flag name="lunarShow" value="4" />
+        <flag name="solarShow" value="2" />
+        <flag name="festivalShow" value="1" />
     </attr>
 
     <!--日历相关的设置,可多个设置同时使用-->
-    <attr name="calendarFlag">
-        <flag name="scrollNoAnimation" value="8192"/>
-        <flag name="dateInCenter" value="4096"/>
-        <flag name="scrollVertical" value="2048"/>
-        <flag name="scrollHorizontal" value="1024"/>
-        <flag name="scrollEnable" value="512"/>
-        <flag name="weekTitleChinese" value="256"/>
-        <flag name="weekTitleHeightFix" value="128"/>
-        <flag name="weekTitleShow" value="64"/>
-        <flag name="minorFestivalColor" value="32"/>
-        <flag name="minorWeekendColor" value="16"/>
-        <flag name="lunarDateShow" value="8"/>
-        <flag name="nextMonthShow" value="4"/>
-        <flag name="previousMonthShow" value="2"/>
+    <attr name="ctCldCalendarFlag">
+        <flag name="scrollNoAnimation" value="8192" />
+        <flag name="dateInCenter" value="4096" />
+        <flag name="scrollVertical" value="2048" />
+        <flag name="scrollHorizontal" value="1024" />
+        <flag name="scrollEnable" value="512" />
+        <flag name="weekTitleChinese" value="256" />
+        <flag name="weekTitleHeightFix" value="128" />
+        <flag name="weekTitleShow" value="64" />
+        <flag name="minorFestivalColor" value="32" />
+        <flag name="minorWeekendColor" value="16" />
+        <flag name="lunarDateShow" value="8" />
+        <flag name="nextMonthShow" value="4" />
+        <flag name="previousMonthShow" value="2" />
     </attr>
 
     <!--是否优先显示节气-->
-    <attr name="festivalShowSolarTermFirst" format="boolean"/>
+    <attr name="ctCldFestivalShowSolarTermFirst" format="boolean" />
     <!--是否优先显示公历节日-->
-    <attr name="festivalShowSolarFirst" format="boolean"/>
+    <attr name="ctCldFestivalShowSolarFirst" format="boolean" />
     <!--是否优先显示农历节日-->
-    <attr name="festivalShowLunarFirst" format="boolean"/>
+    <attr name="ctCldFestivalShowLunarFirst" format="boolean" />
     <!--是否显示节气-->
-    <attr name="festivalSolarTermShow" format="boolean"/>
+    <attr name="ctCldFestivalSolarTermShow" format="boolean" />
     <!--是否显示农历节日-->
-    <attr name="festivalLunarShow" format="boolean"/>
+    <attr name="ctCldFestivalLunarShow" format="boolean" />
     <!--是否显示公历节日-->
-    <attr name="festivalSolarShow" format="boolean"/>
+    <attr name="ctCldFestivalSolarShow" format="boolean" />
     <!--是否显示节日-->
-    <attr name="festivalShow" format="boolean"/>
+    <attr name="ctCldFestivalShow" format="boolean" />
 
     <!--是否启用上下滑动切换日历-->
-    <attr name="calendarScrollVertical" format="boolean"/>
+    <attr name="ctCldCalendarScrollVertical" format="boolean" />
     <!--是否启用左右滑动切换日历-->
-    <attr name="calendarScrollHorizontal" format="boolean"/>
+    <attr name="ctCldCalendarScrollHorizontal" format="boolean" />
     <!--是否启用滑动切换日历功能-->
-    <attr name="calendarScrollEnable" format="boolean"/>
+    <attr name="ctCldCalendarScrollEnable" format="boolean" />
     <!--是否周期标题使用中文-->
-    <attr name="calendarWeekTitleChinese" format="boolean"/>
+    <attr name="ctCldCalendarWeekTitleChinese" format="boolean" />
     <!--是否使用固定周期标题高度-->
-    <attr name="calendarWeekTitleHeightFix" format="boolean"/>
+    <attr name="ctCldCalendarWeekTitleHeightFix" format="boolean" />
     <!--是否显示星期标题-->
-    <attr name="calendarWeekTitleShow" format="boolean"/>
+    <attr name="ctCldCalendarWeekTitleShow" format="boolean" />
     <!--次要月份节日颜色是否使用次要颜色-->
-    <attr name="calendarMinorFestivalColor" format="boolean"/>
+    <attr name="ctCldCalendarMinorFestivalColor" format="boolean" />
     <!--次要月份周末颜色是否使用次要颜色-->
-    <attr name="calendarMinorWeekendColor" format="boolean"/>
+    <attr name="ctCldCalendarMinorWeekendColor" format="boolean" />
     <!--是否显示农历日期-->
-    <attr name="calendarLunarDateShow" format="boolean"/>
+    <attr name="ctCldCalendarLunarDateShow" format="boolean" />
     <!--是否显示下个月日期-->
-    <attr name="calendarNextMonthShow" format="boolean"/>
+    <attr name="ctCldCalendarNextMonthShow" format="boolean" />
     <!--是否显示上个月日期-->
-    <attr name="calendarPreMonthShow" format="boolean"/>
+    <attr name="ctCldCalendarPreMonthShow" format="boolean" />
     <!--是否居中显示日期-->
-    <attr name="calendarDateInCenter" format="boolean"/>
+    <attr name="ctCldCalendarDateInCenter" format="boolean" />
     <!--是否滑动切换不使用动画-->
-    <attr name="calendarScrollNoAnimation" format="boolean"/>
+    <attr name="ctCldCalendarScrollNoAnimation" format="boolean" />
 
     <!--设置一周开始时间-->
-    <attr name="startWeekDay" format="enum">
-        <enum name="sunday" value="1"/>
-        <enum name="monday" value="2"/>
-        <enum name="tuesday" value="3"/>
-        <enum name="wednesday" value="4"/>
-        <enum name="thursday" value="5"/>
-        <enum name="friday" value="6"/>
-        <enum name="saturday" value="7"/>
+    <attr name="ctCldStartWeekDay" format="enum">
+        <enum name="sunday" value="1" />
+        <enum name="monday" value="2" />
+        <enum name="tuesday" value="3" />
+        <enum name="wednesday" value="4" />
+        <enum name="thursday" value="5" />
+        <enum name="friday" value="6" />
+        <enum name="saturday" value="7" />
     </attr>
 
     <!--设置选中日期-->
-    <attr name="selectedDay" format="integer"/>
+    <attr name="ctCldSelectedDay" format="integer" />
     <!--设置底部的Drawable-->
-    <attr name="bottomDrawable" format="reference"/>
+    <attr name="ctCldBottomDrawable" format="reference" />
     <!--设置节日提醒小图标-->
-    <attr name="festivalDrawable" format="reference"/>
+    <attr name="ctCldFestivalDrawable" format="reference" />
     <!--设置调休工作日提醒小图标-->
-    <attr name="workDrawable" format="reference"/>
+    <attr name="ctCldWorkDrawable" format="reference" />
     <!--设置初始化的年份-->
-    <attr name="initYear" format="integer"/>
+    <attr name="ctCldInitYear" format="integer" />
     <!--设置初始化的月份-->
-    <attr name="initMonth" format="integer"/>
+    <attr name="ctCldInitMonth" format="integer" />
     <!--设置初始化的日期-->
-    <attr name="initDay" format="integer"/>
+    <attr name="ctCldInitDay" format="integer" />
     <!--设置星期标题的固定高度-->
-    <attr name="weekTitleFixHeight" format="dimension|integer"/>
+    <attr name="ctCldWeekTitleFixHeight" format="dimension|integer" />
     <!--设置横向滑动切换界面距离比-->
-    <attr name="horizontalScrollRate" format="float"/>
+    <attr name="ctCldHorizontalScrollRate" format="float" />
     <!--设置垂直滑动切换界面距离比-->
-    <attr name="verticalScrollRate" format="float"/>
+    <attr name="ctCldVerticalScrollRate" format="float" />
 
     <!--设置日历背景色-->
-    <attr name="backgroundColor" format="color"/>
+    <attr name="ctCldBackgroundColor" format="color" />
     <!--设置每个日期的背景色-->
-    <attr name="dateBackgroundColor" format="color"/>
+    <attr name="ctCldDateBackgroundColor" format="color" />
     <!--设置默认的字体文本颜色-->
-    <attr name="defaultTextColor" format="color"/>
+    <attr name="ctCldDefaultTextColor" format="color" />
     <!--设置次要的字体文本颜色-->
-    <attr name="minorTextColor" format="color"/>
+    <attr name="ctCldMinorTextColor" format="color" />
     <!--设置周末字体颜色-->
-    <attr name="weekendTextColor" format="color"/>
+    <attr name="ctCldWeekendTextColor" format="color" />
     <!--设置节日字体颜色-->
-    <attr name="festivalTextColor" format="color"/>
+    <attr name="ctCldFestivalTextColor" format="color" />
     <!--设置选中日期字体颜色-->
-    <attr name="selectedDayTextColor" format="color"/>
+    <attr name="ctCldSelectedDayTextColor" format="color" />
     <!--设置今天字体颜色-->
-    <attr name="todayDayTextColor" format="color"/>
+    <attr name="ctCldTodayDayTextColor" format="color" />
     <!--设置选中日期背景色-->
-    <attr name="selectedBackgroundColor" format="color"/>
+    <attr name="ctCldSelectedBackgroundColor" format="color" />
     <!--设置今天背景色-->
-    <attr name="todayBackgroundColor" format="color"/>
+    <attr name="ctCldTodayBackgroundColor" format="color" />
 
     <declare-styleable name="AbsCalendarView">
-        <attr name="festivalFlag"/>
-        <attr name="calendarFlag"/>
-        <attr name="festivalShowSolarTermFirst"/>
-        <attr name="festivalShowSolarFirst"/>
-        <attr name="festivalShowLunarFirst"/>
-        <attr name="festivalSolarTermShow"/>
-        <attr name="festivalLunarShow"/>
-        <attr name="festivalSolarShow"/>
-        <attr name="festivalShow"/>
+        <attr name="ctCldFestivalFlag" />
+        <attr name="ctCldCalendarFlag" />
+        <attr name="ctCldFestivalShowSolarTermFirst" />
+        <attr name="ctCldFestivalShowSolarFirst" />
+        <attr name="ctCldFestivalShowLunarFirst" />
+        <attr name="ctCldFestivalSolarTermShow" />
+        <attr name="ctCldFestivalLunarShow" />
+        <attr name="ctCldFestivalSolarShow" />
+        <attr name="ctCldFestivalShow" />
 
-        <attr name="calendarScrollVertical"/>
-        <attr name="calendarScrollHorizontal"/>
-        <attr name="calendarScrollEnable"/>
-        <attr name="calendarWeekTitleChinese"/>
-        <attr name="calendarWeekTitleHeightFix"/>
-        <attr name="calendarWeekTitleShow"/>
-        <attr name="calendarMinorFestivalColor"/>
-        <attr name="calendarMinorWeekendColor"/>
-        <attr name="calendarLunarDateShow"/>
-        <attr name="calendarNextMonthShow"/>
-        <attr name="calendarPreMonthShow"/>
-        <attr name="calendarDateInCenter"/>
-        <attr name="calendarScrollNoAnimation"/>
+        <attr name="ctCldCalendarScrollVertical" />
+        <attr name="ctCldCalendarScrollHorizontal" />
+        <attr name="ctCldCalendarScrollEnable" />
+        <attr name="ctCldCalendarWeekTitleChinese" />
+        <attr name="ctCldCalendarWeekTitleHeightFix" />
+        <attr name="ctCldCalendarWeekTitleShow" />
+        <attr name="ctCldCalendarMinorFestivalColor" />
+        <attr name="ctCldCalendarMinorWeekendColor" />
+        <attr name="ctCldCalendarLunarDateShow" />
+        <attr name="ctCldCalendarNextMonthShow" />
+        <attr name="ctCldCalendarPreMonthShow" />
+        <attr name="ctCldCalendarDateInCenter" />
+        <attr name="ctCldCalendarScrollNoAnimation" />
 
-        <attr name="startWeekDay"/>
-        <attr name="selectedDay"/>
-        <attr name="bottomDrawable"/>
-        <attr name="festivalDrawable"/>
-        <attr name="workDrawable"/>
-        <attr name="initYear"/>
-        <attr name="initMonth"/>
-        <attr name="initDay"/>
-        <attr name="weekTitleFixHeight"/>
-        <attr name="horizontalScrollRate"/>
-        <attr name="verticalScrollRate"/>
+        <attr name="ctCldStartWeekDay" />
+        <attr name="ctCldSelectedDay" />
+        <attr name="ctCldBottomDrawable" />
+        <attr name="ctCldFestivalDrawable" />
+        <attr name="ctCldWorkDrawable" />
+        <attr name="ctCldInitYear" />
+        <attr name="ctCldInitMonth" />
+        <attr name="ctCldInitDay" />
+        <attr name="ctCldWeekTitleFixHeight" />
+        <attr name="ctCldHorizontalScrollRate" />
+        <attr name="ctCldVerticalScrollRate" />
 
-        <attr name="backgroundColor"/>
-        <attr name="dateBackgroundColor"/>
-        <attr name="defaultTextColor"/>
-        <attr name="minorTextColor"/>
-        <attr name="weekendTextColor"/>
-        <attr name="festivalTextColor"/>
-        <attr name="selectedDayTextColor"/>
-        <attr name="todayDayTextColor"/>
-        <attr name="selectedBackgroundColor"/>
-        <attr name="todayBackgroundColor"/>
+        <attr name="ctCldBackgroundColor" />
+        <attr name="ctCldDateBackgroundColor" />
+        <attr name="ctCldDefaultTextColor" />
+        <attr name="ctCldMinorTextColor" />
+        <attr name="ctCldWeekendTextColor" />
+        <attr name="ctCldFestivalTextColor" />
+        <attr name="ctCldSelectedDayTextColor" />
+        <attr name="ctCldTodayDayTextColor" />
+        <attr name="ctCldSelectedBackgroundColor" />
+        <attr name="ctCldTodayBackgroundColor" />
     </declare-styleable>
 </resources>

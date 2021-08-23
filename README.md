@@ -1,46 +1,39 @@
 [TOC]
-# calendar
+# 1. calendar
 a useful calendar which you can custom its styles or actions easily.
 
-# 概述
+# 2. 概述
 日历控件并不是会很常用到,但是在项目中用到的话很多时候是更倾向于UI自定义程度会比较高或者带有自己应用的特点.
-
 github上已经存在很多很不错的日历控件.但是绝大多数的特点是该日历特有的并且UI的修改与控制也会很麻烦.
-
 基于这个原因,所以就写了这个日历控件库希望**本身功能比较完整的情况下同时也能提供比较方便容易的自定义UI**的功能
 
-# 版本更新内容
-- 0.1.0,首次发布
-- 0.2.0,新增周末标题文本可自定义的功能
-- 0.3.0,文档调整,新增注释说明
-- 0.4.0,打包带源码及注释的库
-- 0.6.0
+# 3. 版本更新内容
 
-```
-1.修复假期/加班图标可能无法正常显示的问题
-2.修复日期工具可能导致出错的问题
-3.修复xml属性设置显示不正常的问题
-4.更新接口参数
-```
+版本号|更新内容
+:--|:--
+0.8.0|更新xml属性名称添加ctCld前缀，解决部分库字段冲突的问题
+0.7.0|修复选中日期可能不正常回调的问题
+0.6.0|1.修复假期/加班图标可能无法正常显示的问题<br>2.修复日期工具可能导致出错的问题<br>3.修复xml属性设置显示不正常的问题<br>4.更新接口参数
+0.4.0|打包带源码及注释的库
+0.3.0|文档调整,新增注释说明
+0.2.0|新增周末标题文本可自定义的功能
+0.1.0|首次发布
 
-- 0.7.0,修复选中日期可能不正常回调的问题
-
-
-# 功能特点
+# 4. 功能特点
 - 丰富的xml属性设置可以满足大部分的需要并且能直接在xml中预览出效果
 - 大量的自定义绘制方法可直接控制日历的UI显示
 - 自定义UI绘制采用接口回调的方式不需要继承任何View直接重写相关的方法即可
 
-# TODO
-- [] 优化绘制的方式和逻辑(长期工作)
-- [] 调整"假期/加班"图标绘制方式
-- [] 分离并独立农历/公历节日计算
-- [] 提供一些日期相关的工具方法或接口
+# 5. TODO
+- [ ] 优化绘制的方式和逻辑(长期工作)
+- [ ] 调整"假期/加班"图标绘制方式
+- [ ] 分离并独立农历/公历节日计算
+- [ ] 提供一些日期相关的工具方法或接口
 
-# 使用方式
-## step1:在项目级别的`build.gradle`文件下声明仓库
+# 6. 使用方式
+## 6.1. step1:在项目级别的`build.gradle`文件下声明仓库
 
-```
+```groovy
 allprojects {
 	repositories {
 		...
@@ -49,31 +42,31 @@ allprojects {
 }
 ```
 
-## step2:引用需要的版本
+## 6.2. step2:引用需要的版本
 
 最新版本: [![](https://jitpack.io/v/CrazyTaro/freeCalendar.svg)](https://jitpack.io/#CrazyTaro/freeCalendar)
-```
+```groovy
 dependencies {
         //latest_release记得替换成最新版本号
         compile 'com.github.CrazyTaro:freeCalendar:latest_release'
 }
 ```
 
-## step3:在xml中使用
+## 6.3. step3:在xml中使用
 
-```
+```xml
 <com.taro.calendar.lib.CalendarView
         android:id="@+id/cv_calendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 ```
 
-## step4:自定义UI控制
+## 6.4. step4:自定义UI控制
 
-### 颜色样式配置
+### 6.4.1. 颜色样式配置
 大部分的颜色可以在xml中直接设置,也可以在代码中进行设置;所有的颜色配置都在`ColorSetting`的类中.
 
-```
+```java
 view.getColorSetting()
         .setBackgroundColor(ColorSetting.DEFAULT_COLOR_BLUE)
         .setDateBackgroundColor(Color.parseColor("#ff9900"));
@@ -83,10 +76,10 @@ view.getColorSetting()
 
 ---
 
-### 假期/加班图标设置
+### 6.4.2. 假期/加班图标设置
 由于默认UI是不处理并显示任何图标的,假期及加班图标的设置需要重写部分绘制UI.
 
-```
+```java
 @Override
 public void updateDayCellAfterNewSetting(@NonNull DayCell cell, @NonNull Lunar lunarDate) {
     //农历日期类计算当前日期是需要休假的
@@ -105,7 +98,7 @@ public void updateDayCellAfterNewSetting(@NonNull DayCell cell, @NonNull Lunar l
 
 设置了显示假期图标或者加班图标后,还可以设置假期或加班图标的标识;该图标的类型是`TipDrawable`,通过调用对应的方法即可设置相关样式.包括背景色/文本等;获取默认的假期/加班图标可调用`calendarView`的方法`getWorkTipDrawable`/`getFestivalDrawable`;
 
-```
+```java
 view.getFestivalDrawable()
         //设置图标文本
         .setText("啊")
@@ -117,14 +110,14 @@ view.getFestivalDrawable()
 
 ---
 
-### 完全自定义UI
+### 6.4.3. 完全自定义UI
 继承`BaseCalendarDrawHelper`,对需要修改或者控制的UI进行重写即可.
 
 其中`BaseCalendarDrawHelper`是一个默认实现了所有绘制接口的类,默认的控件`CalendarView`的绘制操作即使用此类的实例.该类是实现了`IDrawCallback`的绘制接口.
 
 直接实现`IDrawCallback`也是一样的,但一次需要实现的接口有点多,推荐还是继承`BaseCalendarDrawHelper`进行并重写相关方法即可;
 
-```
+```java
 public class BaseCalendarDrawHelper implements IDrawCallback {
     //实现对应的方法...
 }
@@ -132,7 +125,7 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 
 在回调的方法中,实际上需要使用的样式已经设置在`paint`中,如果不需要改动样式直接就可以绘制自己需要的UI
 
-```
+```java
 public class BaseCalendarDrawHelper implements IDrawCallback {
     @Override
     public void drawWeekTitleBackground(Canvas canvas, @NonNull RectF drawArea, Paint paint) {
@@ -169,7 +162,7 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 
 更多接口方法及说明请查看以下内容
 
-# 效果图
+# 7. 效果图
 - 默认效果(带农历日期/节日/日期不居中/显示次要月份)
 
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/normal.png)
@@ -220,65 +213,59 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 
 ![](https://raw.githubusercontent.com/CrazyTaro/freeCalendar/master/screenshot/calendar_xml_attr.gif)
 
-# 接口及属性参考
-## xml属性及意义
-- 节日(包含农历/公历节日及节气)属性
+# 8. 接口及属性参考
+## 8.1. xml属性及意义
+### 8.1.1. 节日(包含农历/公历节日及节气)属性
 
 节日相关的属性值类型都相同,仅列出第一个
 
 |属性名称|属性意义|属性值类型|
 |--|--|--|
-|festivalShowSolarTermFirst|是否优先显示节气|false|
-|festivalShowSolarFirst|是否优先显示公历节日|
-|festivalShowLunarFirst|是否优先显示农历节日|
-|festivalSolarTermShow|是否显示节气|
-|festivalLunarShow|是否显示农历节日|
-|festivalSolarShow|是否显示公历节日|
-|festivalShow|是否显示节日|
+|ctCldFestivalShowSolarTermFirst|是否优先显示节气|false|
+|ctCldFestivalShowSolarFirst|是否优先显示公历节日|
+|ctCldFestivalShowLunarFirst|是否优先显示农历节日|
+|ctCldFestivalSolarTermShow|是否显示节气|
+|ctCldFestivalLunarShow|是否显示农历节日|
+|ctCldFestivalSolarShow|是否显示公历节日|
+|ctCldFestivalShow|是否显示节日|
 
-- 日历(设置或样式)属性
+### 8.1.2. 日历(设置或样式)属性
 
 日历相关的属性值类型都相同,仅列出第一个
 
 |属性名称|属性意义|属性值类型|
 |--|--|--|
-|calendarScrollVertical|是否允许纵向滑动|false|
-|calendarScrollHorizontal|是否允许横向滑动|
-|calendarScrollEnable|是否允许滑动|
-|calendarWeekTitleChinese|是否使用中文的周末标题|
-|calendarWeekTitleHeightFix|是否使用固定高度的周末标题|
-|calendarWeekTitleShow|是否显示周末标题|
-|calendarMinorFestivalColor|次要月份节日字体颜色是否使用次要颜色|
-|calendarMinorWeekendColor|次要月份周末字体颜色是否使用次要颜色|
-|calendarLunarDateShow|是否显示农历日期|
-|calendarNextMonthShow|是否显示下个月数据|
-|calendarPreMonthShow|是否显示上个月数据|
-|calendarDateInCenter|是否日历文本(日期)居中显示|
-|calendarScrollNoAnimation|是否滑动切换界面不使用动画|
+|ctCldCalendarScrollVertical|是否允许纵向滑动|false|
+|ctCldCalendarScrollHorizontal|是否允许横向滑动|
+|ctCldCalendarScrollEnable|是否允许滑动|
+|ctCldCalendarWeekTitleChinese|是否使用中文的周末标题|
+|ctCldCalendarWeekTitleHeightFix|是否使用固定高度的周末标题|
+|ctCldCalendarWeekTitleShow|是否显示周末标题|
+|ctCldCalendarMinorFestivalColor|次要月份节日字体颜色是否使用次要颜色|
+|ctCldCalendarMinorWeekendColor|次要月份周末字体颜色是否使用次要颜色|
+|ctCldCalendarLunarDateShow|是否显示农历日期|
+|ctCldCalendarNextMonthShow|是否显示下个月数据|
+|ctCldCalendarPreMonthShow|是否显示上个月数据|
+|ctCldCalendarDateInCenter|是否日历文本(日期)居中显示|
+|ctCldCalendarScrollNoAnimation|是否滑动切换界面不使用动画|
 
 关于部分属性说明可能有点模糊的下面特别说明一下.
 
-1.次要月份指非当前月份的上个月份和下个月份
-```
-如当前月份为5月,则次要月份为4,6月;
-当前月份为6月时,则次要月份为5,7月;
-即效果图中灰色部分月份
-```
-2.次要颜色是指用于次要月份的主要文本颜色
+1. 次要月份指非当前月份的上个月份和下个月份
+    - 如当前月份为5月,则次要月份为4,6月;
+    - 当前月份为6月时,则次要月份为5,7月；即效果图中灰色部分月份
 
-3.次要月份的节日/周末颜色默认跟随次要颜色,对应属性设置为`false`时则使用设置的节日/周末颜色
-```
-若设置周末颜色为红色,次要颜色为灰色,当`calendarMinorWeekendColor`为false时,则次要月份的周末颜色为`红色`,否则为`灰色`
-```
-4.优先显示节日属性只有该节日允许显示时才有效
+2. 次要颜色是指用于次要月份的主要文本颜色
 
-5.当所有优先显示属性都设置(或者同时设置了多个时),实际的显示顺序永远如下:
-```
-农历节日->公历节日->节气,当其中某个优先属性没有设置时,则忽略该节日;
-若设置农历节日优先,但当天不存在农历节日,同时存在公历节日及节气时,则优先显示公历节日;
-```
+3. 次要月份的节日/周末颜色默认跟随次要颜色,对应属性设置为`false`时则使用设置的节日/周末颜色
+    - **若设置周末颜色为红色,次要颜色为灰色,当`calendarMinorWeekendColor`为false时,则次要月份的周末颜色为`红色`,否则为`灰色`**
+4. 优先显示节日属性只有该节日允许显示时才有效
 
-- 颜色相关属性
+5. 当所有优先显示属性都设置(或者同时设置了多个时),实际的显示顺序永远如下:
+    - 农历节日->公历节日->节气,当其中某个优先属性没有设置时,则忽略该节日;
+    - 若设置农历节日优先,但当天不存在农历节日,同时存在公历节日及节气时,则优先显示公历节日;
+
+### 8.1.3. 颜色相关属性
 
 |属性名称|属性意义|属性值类型|
 |--|--|--|
@@ -293,7 +280,7 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 |selectedBackgroundColor|选中日期背景色|
 |todayBackgroundColor|今天背景色|
 
-- 其它样式相关属性
+### 8.1.4. 其它样式相关属性
 
 |属性名称|属性意义|属性值类型|
 |--|--|--|
@@ -318,7 +305,7 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 该属性在界面大小变动比较大时会比较实用,默认为0.3f;当日历填充屏幕时,由于屏幕高度比较高,0.3f的高度比率可能用户手指滑动不太方便,可以调整该比率小一点更适合滑动;
 ```
 
-## 行为操作回调接口方法
+## 8.2. 行为操作回调接口方法
 在对日历进行一些操作时,会有相应的方法进行回调处理;
 
 |方法名称|返回值|说明|
@@ -326,14 +313,14 @@ public class BaseCalendarDrawHelper implements IDrawCallback {
 |onSelectedDayChanged|-|当选中日期改变时该方法会回调(不管只有日期还是全部)|
 |onResetToToday|-|当日期被重置为今天时回调|
 
-## 绘制接口方法及功能
+## 8.3. 绘制接口方法及功能
 UI的绘制是通过`IDrawCallback`接口进行回调的.即使是默认可直接使用的`CalendarView`也是通过默认的`BaseCalendarDrawHelper`进行绘制UI;
 
 当然在样式不需要改变很多的情况下,绝大部分的逻辑与判断已经处理好了并且仅仅只需要调用`canvas`对应的绘制方法进行绘制即可.
 
 **绘制接口有点多,做好心理准备哦**
 
-### 接口方法及参数说明
+### 8.3.1. 接口方法及参数说明
 
 |方法名称|返回值|说明|
 |--|--|--|
@@ -353,7 +340,7 @@ UI的绘制是通过`IDrawCallback`接口进行回调的.即使是默认可直�
 |drawHolidayDate|-|绘制假期图标,此绘制是在日期上叠加,会挡住部分日期并且默认显示在左上角|
 |drawWorkDate|-|绘制加班图标,此绘制是在日期上叠加,会挡住部分日期并默认显示在左上角|
 
-### 部分重点方法说明
+### 8.3.2. 部分重点方法说明
 
 有部分方法在`BaseCalendarDrawHelper`中并没有实现具体代码,但是实际上是有很重要的预备作用的.下面重点说一下这几个方法.具体可直接查看源码.
 
@@ -386,11 +373,11 @@ UI的绘制是通过`IDrawCallback`接口进行回调的.即使是默认可直�
 
 [接口及参数详情说明](https://github.com/CrazyTaro/freeCalendar/blob/master/interface_introduction.md)
 
-# 其它
+# 9. 其它
 
 农历日期计算的源码来自网络,如果有任何不当的地方,侵删.
 
-# github地址
+# 10. github地址
 
 [https://github.com/CrazyTaro/freeCalendar](https://github.com/CrazyTaro/freeCalendar)
 

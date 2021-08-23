@@ -577,16 +577,16 @@ public abstract class AbsCalendarView extends View {
             int value;
             float valueFloat;
             Drawable drawable;
-            value = ta.getInt(R.styleable.AbsCalendarView_festivalFlag, -1);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldFestivalFlag, -1);
             if (value != -1) {
                 mFestivalMask = value;
             }
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarFlag, -1);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarFlag, -1);
             if (value != -1) {
                 mCalendarMask = value;
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_festivalShowSolarTermFirst, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldFestivalShowSolarTermFirst, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addFestivalFlag(MASK_FESTIVAL_SOLAR_TERM_SHOW_FIRST);
@@ -595,7 +595,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_festivalShowSolarFirst, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldFestivalShowSolarFirst, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addFestivalFlag(MASK_FESTIVAL_SOLAR_SHOW_FIRST);
@@ -604,7 +604,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_festivalShowLunarFirst, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldFestivalShowLunarFirst, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addFestivalFlag(MASK_FESTIVAL_LUNAR_SHOW_FIRST);
@@ -613,7 +613,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_festivalSolarTermShow, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldFestivalSolarTermShow, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addFestivalFlag(MASK_FESTIVAL_SOLAR_TERM_SHOW);
@@ -622,7 +622,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_festivalLunarShow, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldFestivalLunarShow, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addFestivalFlag(MASK_FESTIVAL_LUNAR_SHOW);
@@ -631,7 +631,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_festivalShow, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldFestivalShow, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addFestivalFlag(MASK_FESTIVAL_SHOW);
@@ -640,7 +640,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarScrollVertical, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarScrollVertical, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_SCROLL_VERTICAL);
@@ -649,7 +649,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarScrollHorizontal, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarScrollHorizontal, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_SCROLL_HORIZONTAL);
@@ -658,7 +658,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarScrollEnable, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarScrollEnable, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_SCROLL_ENABLE);
@@ -667,7 +667,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarWeekTitleChinese, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarWeekTitleChinese, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_WEEK_TITLE_CHINESE);
@@ -676,7 +676,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarWeekTitleHeightFix, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarWeekTitleHeightFix, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_WEEK_TITLE_HEIGHT_FIX);
@@ -685,7 +685,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarWeekTitleShow, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarWeekTitleShow, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_WEEK_TITLE_SHOW);
@@ -694,7 +694,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarMinorFestivalColor, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarMinorFestivalColor, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_MINOR_FESTIVAL_COLOR);
@@ -703,7 +703,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarMinorWeekendColor, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarMinorWeekendColor, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_MINOR_WEEKEND_COLOR);
@@ -712,7 +712,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarLunarDateShow, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarLunarDateShow, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_LUNAR_DATE_SHOW);
@@ -721,7 +721,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarNextMonthShow, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarNextMonthShow, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_NEXT_MONTH_SHOW);
@@ -730,7 +730,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarPreMonthShow, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarPreMonthShow, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_PREVIOUS_MONTH_SHOW);
@@ -739,7 +739,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarDateInCenter, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarDateInCenter, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_DATE_IN_CENTER);
@@ -748,7 +748,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_calendarScrollNoAnimation, Integer.MIN_VALUE);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldCalendarScrollNoAnimation, Integer.MIN_VALUE);
             if (value != Integer.MIN_VALUE) {
                 if (value != 0) {
                     addCalendarFlag(MASK_CALENDAR_SCROLL_NO_ANIMATION);
@@ -757,7 +757,7 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_startWeekDay, -1);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldStartWeekDay, -1);
             if (value != -1) {
                 switch (value) {
                     case Calendar.SUNDAY:
@@ -784,71 +784,71 @@ public abstract class AbsCalendarView extends View {
                 }
             }
 
-            drawable = ta.getDrawable(R.styleable.AbsCalendarView_bottomDrawable);
+            drawable = ta.getDrawable(R.styleable.AbsCalendarView_ctCldBottomDrawable);
             if (drawable != null) {
                 mBottomDraw = drawable;
             }
 
-            drawable = ta.getDrawable(R.styleable.AbsCalendarView_festivalDrawable);
+            drawable = ta.getDrawable(R.styleable.AbsCalendarView_ctCldFestivalDrawable);
             if (drawable != null && drawable instanceof TipDrawable) {
                 mDrawFestival = (TipDrawable) drawable;
             }
 
-            drawable = ta.getDrawable(R.styleable.AbsCalendarView_workDrawable);
+            drawable = ta.getDrawable(R.styleable.AbsCalendarView_ctCldWorkDrawable);
             if (drawable != null && drawable instanceof TipDrawable) {
                 mDrawWork = (TipDrawable) drawable;
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_initYear, -1);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldInitYear, -1);
             if (value != -1) {
                 setSelectedYear(value);
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_initMonth, -1);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldInitMonth, -1);
             if (value != -1) {
                 setSelectedMonth(value - 1);
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_initDay, -1);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldInitDay, -1);
             if (value != -1) {
                 setSelectedDay(value);
             }
 
-            value = ta.getInt(R.styleable.AbsCalendarView_selectedDay, -1);
+            value = ta.getInt(R.styleable.AbsCalendarView_ctCldSelectedDay, -1);
             if (value != -1) {
                 setSelectedDay(value);
             }
 
-            valueFloat = ta.getDimensionPixelSize(R.styleable.AbsCalendarView_weekTitleFixHeight, -1);
+            valueFloat = ta.getDimensionPixelSize(R.styleable.AbsCalendarView_ctCldWeekTitleFixHeight, -1);
             if (valueFloat != -1) {
                 setFixWeekTitleHeight(valueFloat);
             }
 
-            valueFloat = ta.getFloat(R.styleable.AbsCalendarView_horizontalScrollRate, -1);
+            valueFloat = ta.getFloat(R.styleable.AbsCalendarView_ctCldHorizontalScrollRate, -1);
             setScrollRate(true, valueFloat);
 
-            valueFloat = ta.getFloat(R.styleable.AbsCalendarView_verticalScrollRate, -1);
+            valueFloat = ta.getFloat(R.styleable.AbsCalendarView_ctCldVerticalScrollRate, -1);
             setScrollRate(false, valueFloat);
 
-            value = ta.getColor(R.styleable.AbsCalendarView_backgroundColor, mColor.mBackgroundColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldBackgroundColor, mColor.mBackgroundColor);
             mColor.mBackgroundColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_dateBackgroundColor, mColor.mDateBackgroundColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldDateBackgroundColor, mColor.mDateBackgroundColor);
             mColor.mDateBackgroundColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_defaultTextColor, mColor.mNormalDateTextColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldDefaultTextColor, mColor.mNormalDateTextColor);
             mColor.mNormalDateTextColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_minorTextColor, mColor.mMinorDateTextColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldMinorTextColor, mColor.mMinorDateTextColor);
             mColor.mMinorDateTextColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_weekendTextColor, mColor.mWeekendTextColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldWeekendTextColor, mColor.mWeekendTextColor);
             mColor.mWeekendTextColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_festivalTextColor, mColor.mFestivalTextColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldFestivalTextColor, mColor.mFestivalTextColor);
             mColor.mFestivalTextColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_selectedDayTextColor, mColor.mSelectDateTextColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldSelectedDayTextColor, mColor.mSelectDateTextColor);
             mColor.mSelectDateTextColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_todayDayTextColor, mColor.mTodayDateTextColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldTodayDayTextColor, mColor.mTodayDateTextColor);
             mColor.mTodayDateTextColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_selectedBackgroundColor, mColor.mSelectDateBackgroundColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldSelectedBackgroundColor, mColor.mSelectDateBackgroundColor);
             mColor.mSelectDateBackgroundColor = value;
-            value = ta.getColor(R.styleable.AbsCalendarView_todayBackgroundColor, mColor.mTodayBackgroundColor);
+            value = ta.getColor(R.styleable.AbsCalendarView_ctCldTodayBackgroundColor, mColor.mTodayBackgroundColor);
             mColor.mTodayBackgroundColor = value;
 
             ta.recycle();
@@ -1367,7 +1367,7 @@ public abstract class AbsCalendarView extends View {
             nowMonth = mTodayDate.get(Calendar.MONTH);
             nowDay = mTodayDate.get(Calendar.DAY_OF_MONTH);
 
-            boolean isSelectedDay = computeIfIsSelectedDay(cell.getDay());
+            boolean isSelectedDay = cell.isToday(mSelectedYear, mSelectedMonth, mSelectedDay);
             boolean isToday = cell.isToday(nowYear, nowMonth, nowDay);
             String day = String.format("%1$02d", cell.getDay());
             dateTextSize = minSize * 2f / 5;
